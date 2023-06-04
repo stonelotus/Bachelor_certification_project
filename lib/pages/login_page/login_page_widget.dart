@@ -632,6 +632,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                                         () {
                                                                       print(
                                                                           'Button-Login pressed ...');
+
                                                                       context
                                                                           .pushNamed(
                                                                         'EventSearchResults',
