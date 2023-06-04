@@ -1,4 +1,6 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:licenta_main/services/auth_service.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -25,6 +27,8 @@ class LoginPageWidget extends StatefulWidget {
 class _LoginPageWidgetState extends State<LoginPageWidget>
     with TickerProviderStateMixin {
   late LoginPageModel _model;
+  bool _isSigningIn = false;
+  final AuthService _authService = AuthService();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -639,7 +643,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                                             hasTransition:
                                                                                 true,
                                                                             transitionType:
-                                                                                PageTransitionType.topToBottom,
+                                                                                PageTransitionType.fade,
                                                                             duration:
                                                                                 Duration(milliseconds: 500),
                                                                           ),
@@ -770,9 +774,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                                             16.0,
                                                                       ),
                                                                       onPressed:
-                                                                          () {
+                                                                          () async {
                                                                         print(
-                                                                            'IconButton pressed ...');
+                                                                            "Google login button pressed");
+                                                                        final User?
+                                                                            user =
+                                                                            await _authService.signInWithGoogle();
+                                                                        print(
+                                                                            user);
                                                                       },
                                                                     ),
                                                                   ),

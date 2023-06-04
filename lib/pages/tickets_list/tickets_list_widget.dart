@@ -100,8 +100,7 @@ class _TicketsListWidgetState extends State<TicketsListWidget> {
                                 extra: <String, dynamic>{
                                   kTransitionInfoKey: TransitionInfo(
                                     hasTransition: true,
-                                    transitionType:
-                                        PageTransitionType.topToBottom,
+                                    transitionType: PageTransitionType.fade,
                                     duration: Duration(milliseconds: 500),
                                   ),
                                 },
@@ -225,7 +224,7 @@ class _TicketsListWidgetState extends State<TicketsListWidget> {
               extra: <String, dynamic>{
                 kTransitionInfoKey: TransitionInfo(
                   hasTransition: true,
-                  transitionType: PageTransitionType.topToBottom,
+                  transitionType: PageTransitionType.fade,
                   duration: Duration(milliseconds: 500),
                 ),
               },
