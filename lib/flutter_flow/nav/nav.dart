@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:licenta_main/pages/tickets_list/tickets_list_widget.dart';
 import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
 
@@ -67,7 +68,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => TicketDetailsWidget(),
             ),
             FFRoute(
-              name: 'events_search_results',
+              name: 'EventSearchResults',
               path: 'eventsSearchResults',
               builder: (context, params) => EventsSearchResultsWidget(),
             ),
@@ -75,6 +76,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'loginPage',
               path: 'loginPage',
               builder: (context, params) => LoginPageWidget(),
+            ),
+            FFRoute(
+              name: 'MyTickets',
+              path: 'myTickets',
+              builder: (context, params) => TicketsListWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),

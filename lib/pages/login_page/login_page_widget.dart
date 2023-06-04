@@ -1,3 +1,5 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -230,8 +232,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                     children: [
                                       Image.asset(
                                         'assets/images/main_logo_licenta.png',
-                                        width: 500.0,
-                                        height: 300.0,
+                                        width: 380.0,
+                                        height: 250.0,
                                         fit: BoxFit.fitWidth,
                                       ),
                                     ],
@@ -626,6 +628,23 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                                         () {
                                                                       print(
                                                                           'Button-Login pressed ...');
+                                                                      context
+                                                                          .pushNamed(
+                                                                        'EventSearchResults',
+                                                                        extra: <
+                                                                            String,
+                                                                            dynamic>{
+                                                                          kTransitionInfoKey:
+                                                                              TransitionInfo(
+                                                                            hasTransition:
+                                                                                true,
+                                                                            transitionType:
+                                                                                PageTransitionType.topToBottom,
+                                                                            duration:
+                                                                                Duration(milliseconds: 500),
+                                                                          ),
+                                                                        },
+                                                                      );
                                                                     },
                                                                     text:
                                                                         'Sign In',
