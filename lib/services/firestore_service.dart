@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/models/ticket_model.dart';
 import 'package:licenta_main/models/user_model.dart';
 
@@ -14,5 +15,21 @@ class FirestoreService {
         .collection('tickets')
         .doc(ticket.ticketId)
         .set(ticket.toDocument());
+  }
+
+  Future<List<TicketModel>> getAllTickets() async {
+    final tickets = await _firestore.collection('tickets').get();
+    return tickets.docs.map((doc) => TicketModel.fromDocument(doc)).toList();
+  }
+
+  Future<EventModel> getEventFromTicket(TicketModel ticket) async {
+    var ticketObj = ticket.toDocument();
+    final eventObj = await _firestore
+        .collection('events')
+        .doc(ticketObj['eventId'].toString())
+        .get();
+    return eventObj.exists
+        ? EventModel.fromDocument(eventObj)
+        : EventModel.empty();
   }
 }
