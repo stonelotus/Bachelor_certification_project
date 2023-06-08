@@ -1,5 +1,7 @@
 import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:licenta_main/constants.dart';
+import 'package:licenta_main/models/event_model.dart';
+import 'package:licenta_main/services/firestore_service.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -339,22 +341,25 @@ class EventList extends StatefulWidget {
 }
 
 class _EventListState extends State<EventList> {
-  List<EventCard> events =
+  List<EventModel> events =
       []; // Initialize your event list. This can also be a state variable that you update as you fetch data.
 
   @override
   void initState() {
     super.initState();
+    loadEvents();
+  }
 
-    for (int i = 0; i < 5; i++) {
-      events.add(EventCard()); //initially add 5 cards
-    }
+  void loadEvents() async {
+    events = await FirestoreService().getAllEvents();
+    print(events);
+    setState(() {});
   }
 
   void _loadMore() async {
     // Add 5 more cards when end of the list is reached
     for (int i = 0; i < 5; i++) {
-      events.add(EventCard());
+      events.add(EventModel.empty());
     }
 
     // Inform the widget that new data has been fetched
@@ -372,14 +377,16 @@ class _EventListState extends State<EventList> {
               index: index,
               hasMore: true,
               loadMore: () => print('Loading More'),
-              child: events[index]);
+              child: EventCard(event: events[index]));
         });
   }
 }
 
 class EventCard extends StatelessWidget {
+  final EventModel event;
   const EventCard({
     Key? key,
+    required this.event,
   }) : super(key: key);
 
   @override
@@ -462,7 +469,7 @@ class EventCard extends StatelessWidget {
                                             ),
                                       ),
                                       Text(
-                                        'A State of Trance',
+                                        event.title,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -472,7 +479,7 @@ class EventCard extends StatelessWidget {
                                             ),
                                       ),
                                       Text(
-                                        'Cali, Colombia',
+                                        event.location,
                                         textAlign: TextAlign.start,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
@@ -486,20 +493,6 @@ class EventCard extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                              ),
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30.0,
-                                borderWidth: 1.0,
-                                buttonSize: 40.0,
-                                icon: Icon(
-                                  Icons.more_vert,
-                                  color: Color(0xFF4F4F71),
-                                  size: 20.0,
-                                ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
                               ),
                             ],
                           ),
@@ -515,7 +508,7 @@ class EventCard extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    '\$300+',
+                                    event.ticketCount.toString(),
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -553,7 +546,7 @@ class EventCard extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    '23 Mar',
+                                    event.date,
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -591,7 +584,7 @@ class EventCard extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    '18:00',
+                                    event.time,
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
