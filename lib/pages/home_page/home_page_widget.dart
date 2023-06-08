@@ -1,3 +1,6 @@
+import 'package:licenta_main/models/ticket_model.dart';
+import 'package:licenta_main/services/firestore_service.dart';
+
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_static_map.dart';
@@ -540,6 +543,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
+                        FirestoreService().writeTicketToFirestore(TicketModel(
+                            seatNumber: 3, eventId: 1, price: 5999));
                         context.pushNamed(
                           'TicketDetails',
                           extra: <String, dynamic>{

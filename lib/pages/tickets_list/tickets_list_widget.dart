@@ -23,6 +23,13 @@ class _TicketsListWidgetState extends State<TicketsListWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+  final List<String> ticketNames = [
+    'Ticket 1',
+    'Ticket 2',
+    'Ticket 3',
+    'Ticket 4',
+    'Ticket 5'
+  ]; // Add as many tickets as you want.
 
   @override
   void initState() {
@@ -83,132 +90,22 @@ class _TicketsListWidgetState extends State<TicketsListWidget> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          InkWell(
-                            onTap: () => {
-                              print('Card pressed ...'),
-                              context.pushNamed(
-                                'TicketDetails',
-                                extra: <String, dynamic>{
-                                  kTransitionInfoKey: TransitionInfo(
-                                    hasTransition: true,
-                                    transitionType: PageTransitionType.fade,
-                                    duration: Duration(milliseconds: 500),
-                                  ),
-                                },
-                              )
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              height: 294,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    FlutterFlowTheme.of(context).primary,
-                                    FlutterFlowTheme.of(context).secondary
-                                  ],
-                                  stops: [0.3, 1],
-                                  begin: AlignmentDirectional(0, -1),
-                                  end: AlignmentDirectional(0, 1),
-                                ),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(30),
-                                      child: Image.asset(
-                                        'assets/images/4183289.jpg',
-                                        width: double.infinity,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        20, 0, 20, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SelectionArea(
-                                                child: Text(
-                                              'Halloween Party',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                            )),
-                                            SelectionArea(
-                                                child: Text(
-                                              'By Flutterflowturn2',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0x7BFFFFFF),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                            )),
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              '20.10.2023',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
-                                            ),
-                                            Text(
-                                              'Entry 20:30',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
+                        child: ListView.builder(
+                          itemCount: ticketNames.length,
+                          itemBuilder: (context, index) {
+                            return TicketWidget(ticketName: ticketNames[index]);
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -230,6 +127,119 @@ class _TicketsListWidgetState extends State<TicketsListWidget> {
               },
             )
           },
+        ),
+      ),
+    );
+  }
+}
+
+class TicketWidget extends StatelessWidget {
+  final String ticketName;
+  const TicketWidget({
+    Key? key,
+    required this.ticketName,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => {
+        print('Card pressed ...'),
+        context.pushNamed(
+          'TicketDetails',
+          extra: <String, dynamic>{
+            kTransitionInfoKey: TransitionInfo(
+              hasTransition: true,
+              transitionType: PageTransitionType.fade,
+              duration: Duration(milliseconds: 500),
+            ),
+          },
+        )
+      },
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
+        child: Container(
+          width: double.infinity,
+          height: 294,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                FlutterFlowTheme.of(context).primary,
+                FlutterFlowTheme.of(context).secondary
+              ],
+              stops: [0.3, 1],
+              begin: AlignmentDirectional(0, -1),
+              end: AlignmentDirectional(0, 1),
+            ),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.asset(
+                    'assets/images/4183289.jpg',
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SelectionArea(
+                            child: Text(
+                          ticketName,
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                        )),
+                        SelectionArea(
+                            child: Text(
+                          'By CHANGE',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0x7BFFFFFF),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                        )),
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          '20.10.2023',
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                        ),
+                        Text(
+                          'Entry 20:30',
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
