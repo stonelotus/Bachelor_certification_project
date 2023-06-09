@@ -11,6 +11,9 @@ import 'package:licenta_main/flutter_flow/nav/nav.dart';
 import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/services/firestore_service.dart';
 import 'package:licenta_main/widgets/event_card.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -26,6 +29,34 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   void initState() {
     super.initState();
     loadUpcomingEvent();
+  }
+
+  var connector = WalletConnect(
+      bridge: 'https://bridge.walletconnect.org',
+      clientMeta: const PeerMeta(
+          name: 'My App',
+          description: 'An app for converting pictures to NFT',
+          url: 'https://walletconnect.org',
+          icons: [
+            'https://files.gitbook.com/v0/b/gitbook-legacy-files/o/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'
+          ]));
+  var _session, _uri;
+
+  loginUsingMetamask(BuildContext context) async {
+    if (!connector.connected) {
+      try {
+        var session = await connector.createSession(onDisplayUri: (uri) async {
+          _uri = uri;
+          await launchUrlString(uri, mode: LaunchMode.externalApplication);
+        });
+        setState(() {
+          debugPrint(session.toString());
+          _session = session;
+        });
+      } catch (exp) {
+        print(exp);
+      }
+    }
   }
 
   Future<void> loadUpcomingEvent() async {
@@ -136,7 +167,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         size: 30.0,
                       ),
                       onPressed: () {
-                        print('IconButton pressed ...');
+                        debugPrint('Will login to MetaMask...');
+                        loginUsingMetamask(context);
                       },
                     ).animateOnPageLoad(
                         animationsMap['iconButtonOnPageLoadAnimation']!),
