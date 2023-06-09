@@ -1,5 +1,5 @@
 // Export pages
-export '/pages/home_page/home_page_widget.dart' show HomePageWidget;
+export 'pages/event_page/event_page_widget.dart' show EventPageWidget;
 export '/pages/ticket_details/ticket_details_widget.dart'
     show TicketDetailsWidget;
 export '/pages/events_search_results/events_search_results_widget.dart'

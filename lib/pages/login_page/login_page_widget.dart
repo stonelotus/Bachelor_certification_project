@@ -635,7 +635,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
 
                                                                       context
                                                                           .pushNamed(
-                                                                        'EventSearchResults',
+                                                                        'HomePage',
                                                                         extra: <
                                                                             String,
                                                                             dynamic>{

@@ -13,7 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mapbox_search/mapbox_search.dart';
 import 'package:provider/provider.dart';
 
-class HomePageModel extends FlutterFlowModel {
+class EventPageModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for RatingBar widget.

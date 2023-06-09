@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/models/ticket_model.dart';
 import 'package:licenta_main/models/user_model.dart';
@@ -37,5 +38,36 @@ class FirestoreService {
   Future<List<EventModel>> getAllEvents() async {
     final events = await _firestore.collection('events').get();
     return events.docs.map((doc) => EventModel.fromDocument(doc)).toList();
+  }
+
+  Future<UserModel> getUser(userId) async {
+    final user = await _firestore.collection('users').doc(userId).get();
+    return user.exists ? UserModel.fromDocument(user) : UserModel.empty();
+  }
+
+  Future<EventModel> getUpcomingEvent(userId) async {
+    final user = await getUser(userId);
+    final ticketsIds = user.tickets;
+    var closestEventDateTime = DateTime.now().add(Duration(days: 365));
+    var closestEvent = EventModel.empty();
+    for (var ticketId in ticketsIds) {
+      final ticket = await _firestore.collection('tickets').doc(ticketId).get();
+      final ticketObj = ticket.data();
+      final event = await _firestore
+          .collection('events')
+          .doc(ticketObj!['eventId'].toString())
+          .get();
+      final eventObj = event.data();
+      final eventDate = eventObj!['date'];
+      final eventTime = eventObj['time'];
+      final eventDateTime =
+          DateFormat('dd.MM.yyyy HH:mm').parse('$eventDate $eventTime');
+      if (eventDateTime.isAfter(DateTime.now()) &&
+          eventDateTime.isBefore(closestEventDateTime)) {
+        closestEventDateTime = eventDateTime;
+        closestEvent = EventModel.fromDocument(event);
+      }
+    }
+    return closestEvent;
   }
 }

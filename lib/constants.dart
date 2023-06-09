@@ -5,7 +5,7 @@ class NavigationRouteIDs {
   NavigationRouteIDs._();
 
   static const List<String> routeIDs = [
-    'EventSearchResults', // index 0
+    'HomePage', // index 0
     'EventSearchResults', // index 1
     'MyTickets', // index 2
     'MyProfile'
