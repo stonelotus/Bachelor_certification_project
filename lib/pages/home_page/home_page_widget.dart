@@ -45,10 +45,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   loginUsingMetamask(BuildContext context) async {
     if (!connector.connected) {
       try {
-        var session = await connector.createSession(onDisplayUri: (uri) async {
-          _uri = uri;
-          await launchUrlString(uri, mode: LaunchMode.externalApplication);
-        });
+        var session = await connector.createSession(
+            chainId: 1337,
+            onDisplayUri: (uri) async {
+              _uri = uri;
+              await launchUrlString(uri, mode: LaunchMode.externalApplication);
+            });
         setState(() {
           debugPrint(session.toString());
           _session = session;

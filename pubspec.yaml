@@ -70,6 +70,7 @@ dependencies:
   web3dart: ^2.5.1
   web_socket_channel: ^2.4.0
   walletconnect_dart: ^0.0.11
+  http: ^0.13.5
 
 dev_dependencies:
 
@@ -96,6 +97,7 @@ flutter:
     - assets/lottie_animations/
     - assets/rive_animations/
     - assets/pdfs/
+    - src/artifacts/
 
 
 
