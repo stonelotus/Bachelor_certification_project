@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:licenta_main/constants.dart';
 import 'package:licenta_main/services/contract_linking.dart';
+import 'package:licenta_main/services/ticket_contract_linking.dart';
 import 'package:provider/provider.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
@@ -60,8 +62,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ContractLinking>(
-      create: (_) => ContractLinking(),
+    return ChangeNotifierProvider<TicketingContractLinking>(
+      create: (_) => TicketingContractLinking(MockCredentials.eventOrganizerPK),
       child: MaterialApp.router(
         title: 'licenta-main',
         localizationsDelegates: [

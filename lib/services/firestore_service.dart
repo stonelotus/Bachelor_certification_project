@@ -45,6 +45,14 @@ class FirestoreService {
     return user.exists ? UserModel.fromDocument(user) : UserModel.empty();
   }
 
+  Future<EventModel> getEventByID(eventId) {
+    return _firestore
+        .collection('events')
+        .doc(eventId)
+        .get()
+        .then((doc) => EventModel.fromDocument(doc));
+  }
+
   Future<EventModel> getUpcomingEvent(userId) async {
     final user = await getUser(userId);
     final ticketsIds = user.tickets;

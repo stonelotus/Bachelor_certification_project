@@ -1,5 +1,8 @@
+import 'package:licenta_main/constants.dart';
+import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/models/ticket_model.dart';
 import 'package:licenta_main/services/firestore_service.dart';
+import 'package:licenta_main/services/ticket_contract_linking.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -31,7 +34,8 @@ class _EventPageWidgetState extends State<EventPageWidget>
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-
+  EventModel event = EventModel.empty();
+  bool eventLoaded = false;
   final animationsMap = {
     'iconButtonOnPageLoadAnimation': AnimationInfo(
       loop: true,
@@ -62,8 +66,24 @@ class _EventPageWidgetState extends State<EventPageWidget>
     super.dispose();
   }
 
+  void loadEventDetails() async {
+    if (eventLoaded == true) {
+      debugPrint("Loaded Event: " + event.toString());
+      return;
+    }
+    final routeData = GoRouter.of(context).location;
+    final queryParams = Uri.parse(routeData).queryParameters;
+    final eventID = queryParams['eventID'];
+    debugPrint("Loaded Event with ID: " + eventID!.toString());
+    event = await FirestoreService().getEventByID(eventID);
+    eventLoaded = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    loadEventDetails();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -158,7 +178,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                       0.0, 0.0, 0.0, 2.0),
                                   child: SelectionArea(
                                       child: Text(
-                                    'Halloween Party',
+                                    event.title,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -171,7 +191,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                 ),
                                 SelectionArea(
                                     child: Text(
-                                  'By FlutterFlowturn2',
+                                  "by " + event.generatedBy,
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -200,7 +220,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                     children: [
                                       SelectionArea(
                                           child: Text(
-                                        'NOV',
+                                        'NOV', //TODO: Change to event date
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -211,7 +231,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                       )),
                                       SelectionArea(
                                           child: Text(
-                                        '28',
+                                        '28', //TODO  Change to event date
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -253,7 +273,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                 ),
                                 SelectionArea(
                                     child: Text(
-                                  'Indonesia',
+                                  event.location,
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -280,7 +300,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                               ),
                               SelectionArea(
                                   child: Text(
-                                '21.00 PM - 01 AM',
+                                event.time.toString(),
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -505,7 +525,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                     ),
                     SelectionArea(
                         child: Text(
-                      'The nights are getting darker, Bandung is being overrun with massive spiders, and your local Big Supermarket has started flogging those cute little mini pumpkins again. You know what that means: Halloween 2022 is right around the corner.\n\nCome and Join Now!',
+                      event.description,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Poppins',
                             color: Color(0x7BFFFFFF),
@@ -544,7 +564,36 @@ class _EventPageWidgetState extends State<EventPageWidget>
                       highlightColor: Colors.transparent,
                       onTap: () async {
                         FirestoreService().writeTicketToFirestore(TicketModel(
-                            seatNumber: 3, eventId: 1, price: 5999));
+                            seatNumber: 3,
+                            eventId: event.id,
+                            price: 5)); //TODO update seatsNumber and price
+                        debugPrint("Generating nft...");
+                        TicketingContractLinking
+                            ticketingContractLinkingSeller =
+                            TicketingContractLinking(
+                                MockCredentials.eventOrganizerPK);
+                        await ticketingContractLinkingSeller.initialSetup();
+
+                        var ticketIdBlockchain =
+                            await ticketingContractLinkingSeller.issueTicket(
+                                event.title, 1, 1, 1, event.date.toString());
+                        debugPrint(ticketIdBlockchain?.toString());
+                        var selletID = await ticketingContractLinkingSeller
+                            .getOwner(ticketIdBlockchain);
+                        debugPrint("Seller id: " + selletID.toString());
+                        ///////////////////////////////////
+                        debugPrint("Buying nft ...");
+                        TicketingContractLinking ticketingContractLinkingBuyer =
+                            TicketingContractLinking(MockCredentials.buyerPK);
+                        await ticketingContractLinkingBuyer.initialSetup();
+                        await ticketingContractLinkingBuyer
+                            .buyTicket(ticketIdBlockchain);
+                        debugPrint("Nft bought");
+                        /////////////////////
+                        ///
+                        var ownerID = await ticketingContractLinkingBuyer
+                            .getOwner(ticketIdBlockchain);
+                        debugPrint("Owner id: " + ownerID.toString());
                         context.pushNamed(
                           'TicketDetails',
                           extra: <String, dynamic>{
@@ -593,7 +642,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 5.0, 0.0),
                                   child: Text(
-                                    '0.004',
+                                    '5', //TODO update
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -605,7 +654,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                   ),
                                 ),
                                 Text(
-                                  'ETH',
+                                  'USD',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(

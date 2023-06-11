@@ -21,6 +21,8 @@ contract TicketingSystem is ERC721Enumerable {
     // Mapping from ticket id to Ticket struct
     mapping(uint256 => Ticket) public tickets;
 
+    event TicketMinted(uint256 ticketId);
+
     constructor() ERC721("TicketingSystem", "TICKET") {}
 
     // Function to mint a new ticket. Any user can call this function.
@@ -42,6 +44,7 @@ contract TicketingSystem is ERC721Enumerable {
             date
         );
         _mint(msg.sender, ticketId); // Create the NFT for the ticket
+        emit TicketMinted(ticketId);
     }
 
     // Function to buy a ticket. The user who calls this function will be the new owner of the ticket.
@@ -54,7 +57,11 @@ contract TicketingSystem is ERC721Enumerable {
 
         _transfer(owner, msg.sender, _ticketId); // Transfer the ownership of the ticket to the buyer
         // Send the funds to the owner of the ticket.
-        payable(owner).transfer(msg.value);
+        payable(owner).transfer(msg.value);  //should be msg.value
+    }
+    // This function will return the owner of a given ticket.
+    function getOwner(uint256 _ticketId) public view returns (address) {
+        return ownerOf(tickets[ticketId]);
     }
 
     // Function to get the details of a ticket.

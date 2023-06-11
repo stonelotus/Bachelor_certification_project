@@ -9,11 +9,15 @@ import 'package:licenta_main/flutter_flow/flutter_flow_theme.dart';
 import 'package:licenta_main/flutter_flow/flutter_flow_util.dart';
 import 'package:licenta_main/flutter_flow/nav/nav.dart';
 import 'package:licenta_main/models/event_model.dart';
+import 'package:licenta_main/services/contract_linking.dart';
+import 'package:licenta_main/services/custom_transaction_tester.dart';
 import 'package:licenta_main/services/firestore_service.dart';
 import 'package:licenta_main/widgets/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
+import 'package:web3dart/web3dart.dart';
+import 'package:http/http.dart' as http;
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -51,6 +55,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               _uri = uri;
               await launchUrlString(uri, mode: LaunchMode.externalApplication);
             });
+        print(session.accounts[0]);
+
         setState(() {
           debugPrint(session.toString());
           _session = session;

@@ -16,6 +16,7 @@ class EventCard extends StatelessWidget {
       onTap: () => {
         context.pushNamed(
           'EventPage',
+          queryParams: {'eventID': event.id.toString()},
           extra: <String, dynamic>{
             kTransitionInfoKey: TransitionInfo(
               hasTransition: true,
