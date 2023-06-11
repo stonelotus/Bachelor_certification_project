@@ -53,6 +53,13 @@ class FirestoreService {
         .then((doc) => EventModel.fromDocument(doc));
   }
 
+  Future<void> writeEventToFirestore(EventModel event) async {
+    await _firestore
+        .collection('events')
+        .doc(event.id.toString())
+        .set(event.toDocument());
+  }
+
   Future<EventModel> getUpcomingEvent(userId) async {
     final user = await getUser(userId);
     final ticketsIds = user.tickets;
@@ -77,5 +84,10 @@ class FirestoreService {
       }
     }
     return closestEvent;
+  }
+
+  Future<int> getNumberOfEvents() async {
+    var res = await _firestore.collection('events').count().get();
+    return res.count;
   }
 }

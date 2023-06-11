@@ -25,6 +25,7 @@ class EventModel {
 
   Map<String, Object?> toDocument() {
     return {
+      'id': id,
       'generatedBy': generatedBy,
       'title': title,
       'description': description,

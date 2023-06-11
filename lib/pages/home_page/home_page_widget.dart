@@ -105,7 +105,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               begin: AlignmentDirectional(0, -1),
               end: AlignmentDirectional(0, 1),
             ),
-            borderRadius: BorderRadius.circular(30),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -160,6 +159,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 children: [Expanded(child: EventCard(event: upcomingEvent))],
               ),
               Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
@@ -168,7 +169,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       borderRadius: 30.0,
                       borderWidth: 1.0,
                       buttonSize: 60.0,
-                      fillColor: FlutterFlowTheme.of(context).secondary,
+                      fillColor: FlutterFlowTheme.of(context).tertiary,
                       icon: FaIcon(
                         FontAwesomeIcons.ethereum,
                         color: Colors.white,
@@ -180,6 +181,55 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       },
                     ).animateOnPageLoad(
                         animationsMap['iconButtonOnPageLoadAnimation']!),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 18, 0),
+                    child: InkWell(
+                      onTap: () => {
+                        context.pushNamed(
+                          'CreateEvent',
+                          extra: <String, dynamic>{
+                            kTransitionInfoKey: TransitionInfo(
+                              hasTransition: true,
+                              transitionType: PageTransitionType.fade,
+                              duration: Duration(milliseconds: 500),
+                            ),
+                          },
+                        )
+                      },
+                      child: Container(
+                        width: 180.0,
+                        height: 60.0,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              FlutterFlowTheme.of(context).primary,
+                              FlutterFlowTheme.of(context).secondary
+                            ],
+                            stops: [0.0, 0.9],
+                            begin: AlignmentDirectional(0.4, -0.98),
+                            end: AlignmentDirectional(-1.0, 0.98),
+                          ),
+                          borderRadius: BorderRadius.circular(30.0),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Create event',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
