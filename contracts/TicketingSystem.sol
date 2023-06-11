@@ -61,7 +61,7 @@ contract TicketingSystem is ERC721Enumerable {
     }
     // This function will return the owner of a given ticket.
     function getOwner(uint256 _ticketId) public view returns (address) {
-        return ownerOf(tickets[ticketId]);
+        return ownerOf(_ticketId);
     }
 
     // Function to get the details of a ticket.

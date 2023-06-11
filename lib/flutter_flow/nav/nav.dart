@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:licenta_main/pages/home_page/home_page_widget.dart';
+import 'package:licenta_main/pages/ticket_validator.dart';
 import 'package:licenta_main/pages/tickets_list/tickets_list_widget.dart';
 import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
@@ -89,9 +90,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => TicketsListWidget(),
             ),
             FFRoute(
-              name: 'MyProfile',
-              path: 'myProfile',
-              builder: (context, params) => TicketsListWidget(),
+              name: 'TicketValidator',
+              path: 'ticketValidator',
+              builder: (context, params) => TicketValidator(),
             ),
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),

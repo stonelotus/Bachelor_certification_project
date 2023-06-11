@@ -8,7 +8,7 @@ class NavigationRouteIDs {
     'HomePage', // index 0
     'EventSearchResults', // index 1
     'MyTickets', // index 2
-    'MyProfile'
+    'TicketValidator'
   ];
 }
 
@@ -19,7 +19,7 @@ class BottomNavBarNavigationItems {
     TabItem(icon: Icons.home, title: 'Home'),
     TabItem(icon: Icons.map, title: 'Discovery'),
     TabItem(icon: Icons.self_improvement, title: 'My Tickets'),
-    TabItem(icon: Icons.person, title: 'My Profile'),
+    TabItem(icon: Icons.person, title: 'Validator'),
   ];
 }
 
