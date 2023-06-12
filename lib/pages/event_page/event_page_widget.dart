@@ -1,8 +1,11 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:licenta_main/constants.dart';
 import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/models/ticket_model.dart';
 import 'package:licenta_main/services/firestore_service.dart';
 import 'package:licenta_main/services/ticket_contract_linking.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -78,6 +81,73 @@ class _EventPageWidgetState extends State<EventPageWidget>
     event = await FirestoreService().getEventByID(eventID);
     eventLoaded = true;
     setState(() {});
+  }
+
+  var connector = WalletConnect(
+      bridge: 'https://bridge.walletconnect.org',
+      clientMeta: const PeerMeta(
+          name: 'My App',
+          description: 'An app for converting pictures to NFT',
+          url: 'https://walletconnect.org',
+          icons: [
+            'https://files.gitbook.com/v0/b/gitbook-legacy-files/o/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'
+          ]));
+  var _session, _uri;
+
+  Future<bool> loginUsingMetamask(BuildContext context) async {
+    final storage = new FlutterSecureStorage();
+    if (!connector.connected) {
+      try {
+        var session = await connector.createSession(
+            chainId: 1337,
+            onDisplayUri: (uri) async {
+              _uri = uri;
+              await launchUrlString(uri, mode: LaunchMode.externalApplication);
+            });
+        String storedPublicKey = await storage.read(key: 'publicKey') ?? "";
+        print(session.accounts[0].toString());
+        print(storedPublicKey);
+        if (session.accounts[0].toString().toLowerCase() ==
+            storedPublicKey.toLowerCase()) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (exp) {
+        print(exp);
+        return false;
+      }
+    }
+    return false;
+  }
+
+  Future<void> showLoadingDialog(BuildContext context, GlobalKey key) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return new WillPopScope(
+          onWillPop: () async => false,
+          child: SimpleDialog(
+              key: key,
+              backgroundColor: Colors.black54,
+              children: <Widget>[
+                Center(
+                  child: Column(children: [
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Please Wait....",
+                      style: TextStyle(color: Colors.blueAccent),
+                    )
+                  ]),
+                )
+              ]),
+        );
+      },
+    );
   }
 
   @override
@@ -568,6 +638,15 @@ class _EventPageWidgetState extends State<EventPageWidget>
                             onTap: () async {
                               //TODO update seatsNumber and price
 
+                              GlobalKey _keyLoader = GlobalKey();
+                              bool metamaskConfirm =
+                                  await loginUsingMetamask(context);
+                              print(metamaskConfirm);
+                              if (metamaskConfirm == false) {
+                                return;
+                              }
+                              print("Will start buying ticket...");
+                              showLoadingDialog(context, _keyLoader);
                               int soldTickets = await FirestoreService()
                                   .getNumberOfSoldTicketsOfEvent(event.id);
                               int seatNumber =
@@ -601,10 +680,13 @@ class _EventPageWidgetState extends State<EventPageWidget>
 
                               ///////////////////////////////////
                               debugPrint("Buying nft ...");
+                              final storage = new FlutterSecureStorage();
+                              String buyerPK = await storage.read(key: "pk") ??
+                                  MockCredentials.buyerPK;
+
                               TicketingContractLinking
                                   ticketingContractLinkingBuyer =
-                                  TicketingContractLinking(
-                                      MockCredentials.buyerPK);
+                                  TicketingContractLinking(buyerPK);
                               await ticketingContractLinkingBuyer
                                   .initialSetup();
                               await ticketingContractLinkingBuyer
@@ -631,6 +713,8 @@ class _EventPageWidgetState extends State<EventPageWidget>
                               var ownerID = await ticketingContractLinkingBuyer
                                   .getOwner(ticketIdBlockchain);
                               debugPrint("Owner id: " + ownerID.toString());
+                              Navigator.of(context).pop();
+
                               context.pushNamed(
                                 'TicketDetails',
                                 params: {

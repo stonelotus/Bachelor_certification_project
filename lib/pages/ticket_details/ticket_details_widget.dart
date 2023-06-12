@@ -92,21 +92,21 @@ class _TicketDetailsWidgetState extends State<TicketDetailsWidget> {
                                     fontSize: 18.0,
                                   ),
                             )),
-                            FlutterFlowIconButton(
-                              borderColor: Colors.transparent,
-                              borderRadius: 30.0,
-                              borderWidth: 1.0,
-                              buttonSize: 40.0,
-                              fillColor: Color(0x34FFFFFF),
-                              icon: Icon(
-                                Icons.ios_share,
-                                color: Colors.white,
-                                size: 20.0,
-                              ),
-                              onPressed: () {
-                                print('IconButton pressed ...');
-                              },
-                            ),
+                            // FlutterFlowIconButton(
+                            //   borderColor: Colors.transparent,
+                            //   borderRadius: 30.0,
+                            //   borderWidth: 1.0,
+                            //   buttonSize: 40.0,
+                            //   fillColor: Color(0x34FFFFFF),
+                            //   icon: Icon(
+                            //     Icons.ios_share,
+                            //     color: Colors.white,
+                            //     size: 20.0,
+                            //   ),
+                            //   onPressed: () {
+                            //     print('IconButton pressed ...');
+                            //   },
+                            // ),
                           ],
                         ),
                       ),
@@ -507,7 +507,7 @@ class _TicketDetailsWidgetState extends State<TicketDetailsWidget> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  5.0, 300.0, 5.0, 0.0),
+                                  5.0, 300.0, 0.0, 0.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,

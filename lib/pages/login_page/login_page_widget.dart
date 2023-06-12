@@ -1,6 +1,8 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:licenta_main/services/auth_service.dart';
+import 'package:web3dart/credentials.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -629,10 +631,44 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                                   ),
                                                                   FFButtonWidget(
                                                                     onPressed:
-                                                                        () {
+                                                                        () async {
                                                                       print(
                                                                           'Button-Login pressed ...');
 
+                                                                      final storage =
+                                                                          new FlutterSecureStorage();
+                                                                      String
+                                                                          pk =
+                                                                          await storage.read(key: "pk") ??
+                                                                              "";
+                                                                      String
+                                                                          publicK =
+                                                                          await storage.read(key: 'publicKey') ??
+                                                                              "";
+                                                                      if (pk ==
+                                                                              "" ||
+                                                                          publicK ==
+                                                                              "") {
+                                                                        GlobalKey
+                                                                            _keyLoader =
+                                                                            GlobalKey();
+
+                                                                        String?
+                                                                            userInputKey =
+                                                                            await showTextInputDialog(context,
+                                                                                _keyLoader);
+                                                                        if (userInputKey !=
+                                                                            null) {
+                                                                          print(
+                                                                              userInputKey.toString());
+                                                                          await storage.write(
+                                                                              key: "pk",
+                                                                              value: userInputKey.toString());
+                                                                          await storage.write(
+                                                                              key: 'publicKey',
+                                                                              value: EthPrivateKey.fromHex(userInputKey.toString()).address.hexEip55);
+                                                                        }
+                                                                      }
                                                                       context
                                                                           .pushNamed(
                                                                         'HomePage',
@@ -1352,5 +1388,64 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
         ),
       ),
     );
+  }
+}
+
+Future<String?> showTextInputDialog(BuildContext context, GlobalKey key) async {
+  final TextEditingController textEditingController = TextEditingController();
+
+  bool? result = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: SimpleDialog(
+          key: key,
+          backgroundColor: Colors.white,
+          children: <Widget>[
+            Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Please Enter Text",
+                      style: TextStyle(color: Colors.blueAccent),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: textEditingController,
+                      maxLines: 8,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter your text here',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pop(true); // Close the dialog when you're done
+                    },
+                    child: Text('Submit'),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    },
+  );
+
+  if (result != null && result) {
+    // If the user pressed 'Submit', return the entered text
+    return textEditingController.text;
+  } else {
+    // If the user cancelled the dialog without pressing 'Submit', return null
+    return null;
   }
 }
