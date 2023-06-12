@@ -28,7 +28,7 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   EventModel upcomingEvent = EventModel.empty();
-
+  bool loaded = false;
   @override
   void initState() {
     super.initState();
@@ -73,6 +73,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     setState(() {
       print("Got upcoming event: $upcomingEvent");
       print(upcomingEvent.title);
+      loaded = true;
     });
   }
 
@@ -161,7 +162,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Row(
                 children: [
                   Expanded(
-                      child: upcomingEvent.title != ''
+                      child: (upcomingEvent.title != '' && loaded == true) ||
+                              loaded == false
                           ? EventCard(event: upcomingEvent)
                           : Text("No upcoming events")) //TODO update this
                 ],

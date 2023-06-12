@@ -637,6 +637,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
 
                                                                       final storage =
                                                                           new FlutterSecureStorage();
+                                                                      // await storage
+                                                                      //     .deleteAll();
                                                                       String
                                                                           pk =
                                                                           await storage.read(key: "pk") ??
