@@ -179,7 +179,7 @@ class TicketWidget extends StatelessWidget {
                   'TicketDetails',
                   params: {
                     'ticketDBId':
-                        event.id.toString() + "_1" //TODO edit with seatNumber
+                        event.id.toString() + "_" + ticket.seatNumber.toString()
                   },
                   extra: <String, dynamic>{
                     kTransitionInfoKey: TransitionInfo(

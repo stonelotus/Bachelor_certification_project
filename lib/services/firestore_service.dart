@@ -116,4 +116,17 @@ class FirestoreService {
         .get();
     return res.count;
   }
+
+  Future<void> addTicketIdToUser(userId, ticket) async {
+    final user = await getUser(userId);
+    user.tickets.add(ticket.dbId);
+    await _firestore.collection('users').doc(userId).set(user.toDocument());
+  }
+
+  Future<void> updateEventTicketsAvailable(eventId, ticketsAvailable) async {
+    await _firestore
+        .collection('events')
+        .doc(eventId.toString())
+        .update({'ticketsAvailable': ticketsAvailable});
+  }
 }

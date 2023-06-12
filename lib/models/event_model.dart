@@ -11,6 +11,7 @@ class EventModel {
   final int ticketCount;
   final int id;
   final double ticketPrice;
+  final int ticketsAvailable;
 
   EventModel(
       {required this.id,
@@ -22,7 +23,8 @@ class EventModel {
       required this.time,
       required this.photoUrl,
       required this.ticketCount,
-      required this.ticketPrice});
+      required this.ticketPrice,
+      required this.ticketsAvailable});
 
   Map<String, Object?> toDocument() {
     return {
@@ -50,6 +52,7 @@ class EventModel {
       photoUrl: doc['photoUrl'],
       ticketCount: doc['ticketCount'],
       ticketPrice: double.parse(doc['ticketPrice'].toString()),
+      ticketsAvailable: doc['ticketsAvailable'],
     );
   }
   factory EventModel.empty() {
@@ -64,6 +67,7 @@ class EventModel {
       photoUrl: '',
       ticketCount: 0,
       ticketPrice: 0.0,
+      ticketsAvailable: 0,
     );
   }
 
@@ -81,7 +85,7 @@ class EventModel {
         photoUrl: json['photoUrl'] as String,
         ticketCount: json['ticketCount'] as int,
         ticketPrice:
-            json['ticketPrice'] as double // make sure ticketCount is an int
-        );
+            json['ticketPrice'] as double, // make sure ticketCount is an int
+        ticketsAvailable: json['ticketsAvailable'] as int);
   }
 }

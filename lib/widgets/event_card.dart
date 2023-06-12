@@ -130,7 +130,7 @@ class EventCard extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    event.ticketCount.toString(),
+                                    event.ticketsAvailable.toString(),
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium

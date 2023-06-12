@@ -5,9 +5,7 @@ class TicketService {
   static Future getTicketObject(ticketEncoded, ticketingContractLinking) async {
     var decodedJSON = jsonDecode(ticketEncoded);
     var ticketID = decodedJSON['ticketId'];
-
     var ticket = await ticketingContractLinking.getTicket(ticketID);
-    print(ticket);
     var ticketData = {
       "eventTitle": ticket[1],
       "eventSeat": ticket[4],

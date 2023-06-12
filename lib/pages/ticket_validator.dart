@@ -32,10 +32,6 @@ class _TicketValidatorState extends State<TicketValidator> {
   updateEventDetails(ticketObject) async {
     var ticket = await TicketService.getTicketObject(
         ticketObject, ticketingContractLinkingBuyer);
-    print("BRO?");
-    print(ticket);
-    print(ticket["eventTitle"]);
-    print(ticket["eventSeat"]);
     setState(() {
       eventSeat = ticket['eventSeat'].toString();
       eventTitle = ticket['eventTitle'].toString();

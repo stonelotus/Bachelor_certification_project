@@ -9,14 +9,14 @@ class TicketModel {
   final int eventId;
   final int seatNumber;
   final double price;
-  final int batchNo; // index in a batch (minimum 1)
+  final int orderNumber; // index in a batch (minimum 1)
 
   TicketModel(
       {required this.eventName,
       required this.eventId,
       required this.seatNumber,
       required this.price,
-      required this.batchNo,
+      required this.orderNumber,
       required this.blockchainTicketId}) {
     this.dbId = this.eventId.toString() + "_" + this.seatNumber.toString();
   }
@@ -28,7 +28,7 @@ class TicketModel {
       'eventId': eventId,
       'seatNumber': seatNumber,
       'price': price,
-      'batchNo': batchNo,
+      'orderNumber': orderNumber,
       'blockchainTicketId': blockchainTicketId
     };
   }
@@ -39,7 +39,7 @@ class TicketModel {
         eventId: doc['eventId'],
         seatNumber: doc['seatNumber'],
         price: doc['price'],
-        batchNo: doc['batchNo'],
+        orderNumber: doc['orderNumber'],
         blockchainTicketId: doc['blockchainTicketId']);
   }
 
@@ -48,7 +48,7 @@ class TicketModel {
       eventId: 0,
       seatNumber: 0,
       price: 0,
-      batchNo: 0,
+      orderNumber: 0,
       blockchainTicketId: -1,
       eventName: '',
     );

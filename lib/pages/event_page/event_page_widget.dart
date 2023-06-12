@@ -559,129 +559,183 @@ class _EventPageWidgetState extends State<EventPageWidget>
                       },
                     ).animateOnPageLoad(
                         animationsMap['iconButtonOnPageLoadAnimation']!),
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        //TODO update seatsNumber and price
+                    event.ticketsAvailable > 0
+                        ? InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              //TODO update seatsNumber and price
 
-                        int soldTickets = await FirestoreService()
-                            .getNumberOfSoldTicketsOfEvent(event.id);
-                        int seatNumber = soldTickets + 1;
+                              int soldTickets = await FirestoreService()
+                                  .getNumberOfSoldTicketsOfEvent(event.id);
+                              int seatNumber =
+                                  soldTickets + 1; //TODO insufficient
 
-                        debugPrint("Generating nft...");
-                        // get seller TicketContractLinking
-                        TicketingContractLinking
-                            ticketingContractLinkingSeller =
-                            TicketingContractLinking(
-                                MockCredentials.eventOrganizerPK);
-                        await ticketingContractLinkingSeller.initialSetup();
+                              debugPrint("Generating nft...");
+                              // get seller TicketContractLinking
+                              TicketingContractLinking
+                                  ticketingContractLinkingSeller =
+                                  TicketingContractLinking(
+                                      MockCredentials.eventOrganizerPK);
+                              await ticketingContractLinkingSeller
+                                  .initialSetup();
 
-                        // generate nft
-                        var ticketIdBlockchain =
-                            await ticketingContractLinkingSeller.issueTicket(
-                                event.title,
-                                event.ticketPrice,
-                                event.ticketCount,
-                                seatNumber,
-                                event.date.toString());
+                              // generate nft
+                              var ticketIdBlockchain =
+                                  await ticketingContractLinkingSeller
+                                      .issueTicket(
+                                          event.title,
+                                          event.ticketPrice,
+                                          event.ticketCount,
+                                          seatNumber,
+                                          event.date.toString());
 
-                        debugPrint(ticketIdBlockchain?.toString());
-                        var sellerID = await ticketingContractLinkingSeller
-                            .getOwner(ticketIdBlockchain);
+                              debugPrint(ticketIdBlockchain?.toString());
+                              var sellerID =
+                                  await ticketingContractLinkingSeller
+                                      .getOwner(ticketIdBlockchain);
 
-                        debugPrint("Seller id: " + sellerID.toString());
+                              debugPrint("Seller id: " + sellerID.toString());
 
-                        ///////////////////////////////////
-                        debugPrint("Buying nft ...");
-                        TicketingContractLinking ticketingContractLinkingBuyer =
-                            TicketingContractLinking(MockCredentials.buyerPK);
-                        await ticketingContractLinkingBuyer.initialSetup();
-                        await ticketingContractLinkingBuyer
-                            .buyTicket(ticketIdBlockchain);
-                        debugPrint("Nft bought");
+                              ///////////////////////////////////
+                              debugPrint("Buying nft ...");
+                              TicketingContractLinking
+                                  ticketingContractLinkingBuyer =
+                                  TicketingContractLinking(
+                                      MockCredentials.buyerPK);
+                              await ticketingContractLinkingBuyer
+                                  .initialSetup();
+                              await ticketingContractLinkingBuyer
+                                  .buyTicket(ticketIdBlockchain);
+                              debugPrint("Nft bought");
 
-                        await FirestoreService()
-                            .writeTicketToFirestore(TicketModel(
-                                seatNumber: seatNumber, //TODO TDB
-                                eventId: event.id,
-                                price: event.ticketPrice,
-                                batchNo: event.ticketCount,
-                                blockchainTicketId: ticketIdBlockchain,
-                                eventName: event.title));
-                        /////////////////////
-                        ///
-                        var ownerID = await ticketingContractLinkingBuyer
-                            .getOwner(ticketIdBlockchain);
-                        debugPrint("Owner id: " + ownerID.toString());
-                        context.pushNamed(
-                          'TicketDetails',
-                          params: {
-                            'ticketDBId': event.id.toString() +
-                                "_" +
-                                seatNumber.toString(),
-                          },
-                          extra: <String, dynamic>{
-                            kTransitionInfoKey: TransitionInfo(
-                              hasTransition: true,
-                              transitionType: PageTransitionType.topToBottom,
-                              duration: Duration(milliseconds: 500),
-                            ),
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: 280.0,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              FlutterFlowTheme.of(context).primary,
-                              FlutterFlowTheme.of(context).secondary
-                            ],
-                            stops: [0.0, 0.9],
-                            begin: AlignmentDirectional(1.0, -0.98),
-                            end: AlignmentDirectional(-1.0, 0.98),
-                          ),
-                          borderRadius: BorderRadius.circular(30.0),
-                          shape: BoxShape.rectangle,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'Buy Ticket Now ',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
+///////////////////////////////////////////////////////////////////////////////////
+                              TicketModel newTicket = TicketModel(
+                                  seatNumber: seatNumber,
+                                  eventId: event.id,
+                                  price: event.ticketPrice,
+                                  orderNumber: soldTickets + 1,
+                                  blockchainTicketId: ticketIdBlockchain,
+                                  eventName: event.title);
+                              await FirestoreService()
+                                  .writeTicketToFirestore(newTicket);
+                              await FirestoreService().addTicketIdToUser(
+                                  'S8Aa95jYU8MlzBjFUEXit1zbuTP2', newTicket);
+                              await FirestoreService()
+                                  .updateEventTicketsAvailable(
+                                      event.id, event.ticketsAvailable - 1);
+                              /////////////////////
+                              ///
+                              var ownerID = await ticketingContractLinkingBuyer
+                                  .getOwner(ticketIdBlockchain);
+                              debugPrint("Owner id: " + ownerID.toString());
+                              context.pushNamed(
+                                'TicketDetails',
+                                params: {
+                                  'ticketDBId': event.id.toString() +
+                                      "_" +
+                                      seatNumber.toString(),
+                                },
+                                extra: <String, dynamic>{
+                                  kTransitionInfoKey: TransitionInfo(
+                                    hasTransition: true,
+                                    transitionType:
+                                        PageTransitionType.topToBottom,
+                                    duration: Duration(milliseconds: 500),
                                   ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 5.0, 0.0),
-                                  child: Text(
-                                    '5', //TODO update
+                                },
+                              );
+                            },
+                            child: Container(
+                              width: 280.0,
+                              height: 60.0,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    FlutterFlowTheme.of(context).primary,
+                                    FlutterFlowTheme.of(context).secondary
+                                  ],
+                                  stops: [0.0, 0.9],
+                                  begin: AlignmentDirectional(1.0, -0.98),
+                                  end: AlignmentDirectional(-1.0, 0.98),
+                                ),
+                                borderRadius: BorderRadius.circular(30.0),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    'Buy Ticket Now ',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
                                           fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          fontSize: 20.0,
+                                          color: Colors.white,
                                         ),
                                   ),
-                                ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 5.0, 0.0),
+                                        child: Text(
+                                          event.ticketPrice
+                                              .toString(), //TODO update
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryBtnText,
+                                                fontSize: 20.0,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(
+                                        'USD',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.white,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : Container(
+                            width: 280.0,
+                            height: 60.0,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  FlutterFlowTheme.of(context).primary,
+                                  FlutterFlowTheme.of(context).secondary
+                                ],
+                                stops: [0.0, 0.9],
+                                begin: AlignmentDirectional(1.0, -0.98),
+                                end: AlignmentDirectional(-1.0, 0.98),
+                              ),
+                              borderRadius: BorderRadius.circular(30.0),
+                              shape: BoxShape.rectangle,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
                                 Text(
-                                  'USD',
+                                  'Sold Out',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -691,10 +745,7 @@ class _EventPageWidgetState extends State<EventPageWidget>
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                   ],
                 ),
               ),

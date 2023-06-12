@@ -393,7 +393,7 @@ class _TicketDetailsWidgetState extends State<TicketDetailsWidget> {
                                                   ),
                                                   SelectionArea(
                                                       child: Text(
-                                                    'Dresscode',
+                                                    'Seat',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -408,7 +408,8 @@ class _TicketDetailsWidgetState extends State<TicketDetailsWidget> {
                                                   )),
                                                   SelectionArea(
                                                       child: Text(
-                                                    'Halloween',
+                                                    ticket.seatNumber
+                                                        .toString(),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -455,7 +456,8 @@ class _TicketDetailsWidgetState extends State<TicketDetailsWidget> {
                                                   10.0, 10.0, 10.0, 10.0),
                                           child: QrImage(
                                             data: TicketService()
-                                                .generateQRCodeString(1),
+                                                .generateQRCodeString(
+                                                    ticket.blockchainTicketId),
                                             version: QrVersions.auto,
                                             size: 200.0,
                                           ),

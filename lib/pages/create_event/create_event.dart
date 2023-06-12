@@ -142,11 +142,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                           date: _model.dateController?.text ?? "Test",
                           time: _model.timeController?.text ?? "Test",
                           ticketCount:
-                              int.parse(_model.ticketCount?.text ?? "Test"),
+                              int.parse(_model.ticketCount?.text ?? "0"),
                           generatedBy: "Iulian",
                           photoUrl: 'ign',
-                          ticketPrice: double.parse(
-                              _model.ticketPrice.text)); //TODO change
+                          ticketPrice: double.parse(_model.ticketPrice.text),
+                          ticketsAvailable: int.parse(
+                              _model.ticketCount?.text ?? "0")); //TODO change
 
                       await FirestoreService().writeEventToFirestore(newEvent);
                       debugPrint("Event created done");

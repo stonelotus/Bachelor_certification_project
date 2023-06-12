@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'dart:io';
 
@@ -98,7 +100,7 @@ class TicketingContractLinking extends ChangeNotifier {
     debugPrint("Getting ticket...");
     isLoading = true;
     notifyListeners(); // Notify listeners to update the UI.
-
+    print("From this ID: $ticketId");
     final ticket = await _client.call(
       contract: _contract,
       function: _getTicket,
@@ -127,8 +129,8 @@ class TicketingContractLinking extends ChangeNotifier {
         contract: _contract,
         function: _buyTicket,
         parameters: [BigInt.from(ticketId)],
-        value: EtherAmount.fromUnitAndValue(EtherUnit.ether,
-            ticketPrice), // This line is added. Change the value according to your needs.
+        value: EtherAmount.inWei(
+            BigInt.from((0.01 * pow(10, 18)).toInt())), //Should be ticketPrice
       ),
       chainId: _chainId,
     );
