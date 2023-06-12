@@ -103,6 +103,10 @@ class _EventPageWidgetState extends State<EventPageWidget>
                       height: 250.0,
                       fit: BoxFit.cover,
                     ),
+                    Container(
+                      height: 200.0,
+                      decoration: BoxDecoration(),
+                    ),
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(15.0, 40.0, 15.0, 0.0),
@@ -110,42 +114,40 @@ class _EventPageWidgetState extends State<EventPageWidget>
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 50.0,
-                            fillColor: Color(0x80FFFFFF),
-                            icon: Icon(
-                              Icons.chevron_left,
-                              color: Colors.white,
-                              size: 30.0,
+                          InkWell(
+                            child: FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30.0,
+                              borderWidth: 1.0,
+                              buttonSize: 50.0,
+                              fillColor: Color(0x80FFFFFF),
+                              icon: Icon(
+                                Icons.chevron_left,
+                                color: Colors.white,
+                                size: 30.0,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
                             ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 50.0,
-                            fillColor: Color(0x80FFFFFF),
-                            icon: Icon(
-                              Icons.bookmark_border,
-                              color: Colors.white,
-                              size: 30.0,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
-                          ),
+                          // FlutterFlowIconButton(
+                          //   borderColor: Colors.transparent,
+                          //   borderRadius: 30.0,
+                          //   borderWidth: 1.0,
+                          //   buttonSize: 50.0,
+                          //   fillColor: Color(0x80FFFFFF),
+                          //   icon: Icon(
+                          //     Icons.bookmark_border,
+                          //     color: Colors.white,
+                          //     size: 30.0,
+                          //   ),
+                          //   onPressed: () {
+                          //     print('IconButton pressed ...');
+                          //   },
+                          // ),
                         ],
                       ),
-                    ),
-                    Container(
-                      height: 200.0,
-                      decoration: BoxDecoration(),
                     ),
                   ],
                 ),
@@ -596,6 +598,10 @@ class _EventPageWidgetState extends State<EventPageWidget>
                         debugPrint("Owner id: " + ownerID.toString());
                         context.pushNamed(
                           'TicketDetails',
+                          params: {
+                            'ticketDBId': event.id.toString() +
+                                "_1" //TODO edit with seatNumber
+                          },
                           extra: <String, dynamic>{
                             kTransitionInfoKey: TransitionInfo(
                               hasTransition: true,

@@ -34,4 +34,12 @@ class TicketModel {
         price: doc['price'],
         eventName: doc['eventName']);
   }
+
+  factory TicketModel.empty() {
+    return TicketModel(
+      eventId: 0,
+      seatNumber: 0,
+      price: 0,
+    );
+  }
 }

@@ -45,7 +45,8 @@ class _TicketsListWidgetState extends State<TicketsListWidget> {
   }
 
   Future<void> loadTickets() async {
-    _tickets = await FirestoreService().getAllTickets();
+    _tickets = await FirestoreService()
+        .getAllUserTickets('S8Aa95jYU8MlzBjFUEXit1zbuTP2');
     setState(
         () {}); // Call setState to trigger a rebuild of the widget with the loaded data.
   }
@@ -176,6 +177,10 @@ class TicketWidget extends StatelessWidget {
                 print('Card pressed ...'),
                 context.pushNamed(
                   'TicketDetails',
+                  params: {
+                    'ticketDBId':
+                        event.id.toString() + "_1" //TODO edit with seatNumber
+                  },
                   extra: <String, dynamic>{
                     kTransitionInfoKey: TransitionInfo(
                       hasTransition: true,

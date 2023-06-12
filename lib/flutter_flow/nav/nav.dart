@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:licenta_main/flutter_flow/flutter_flow_util.dart';
+import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/pages/create_event/create_event.dart';
 import 'package:licenta_main/pages/home_page/home_page_widget.dart';
 import 'package:licenta_main/pages/ticket_validator.dart';
@@ -71,10 +73,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => EventPageWidget(),
             ),
             FFRoute(
-              name: 'TicketDetails',
-              path: 'ticketDetails',
-              builder: (context, params) => TicketDetailsWidget(),
-            ),
+                name: 'TicketDetails',
+                path: 'ticketDetails/:ticketDBId',
+                builder: (context, params) {
+                  return TicketDetailsWidget(
+                      ticketDBId: params.getParam<String>(
+                          'ticketDBId', ParamType.String));
+                  // final eventModelJson =
+                  //     params.getParam<String>('eventModel', ParamType.String);
+                  // final eventModel =
+                  //     EventModel.fromJson(jsonDecode(eventModelJson));
+                  // return TicketDetailsWidget(TicketModel: eventModel);
+                }),
             FFRoute(
               name: 'EventSearchResults',
               path: 'eventsSearchResults',

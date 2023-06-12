@@ -24,6 +24,24 @@ class FirestoreService {
     return tickets.docs.map((doc) => TicketModel.fromDocument(doc)).toList();
   }
 
+  Future<List<TicketModel>> getAllUserTickets(userId) async {
+    final user = await getUser(userId);
+    final ticketsIds = user.tickets;
+    var tickets = <TicketModel>[];
+    for (var ticketId in ticketsIds) {
+      final ticket = await _firestore.collection('tickets').doc(ticketId).get();
+      tickets.add(TicketModel.fromDocument(ticket));
+    }
+    return tickets;
+  }
+
+  Future<TicketModel> getTicketById(ticketId) async {
+    final ticket = await _firestore.collection('tickets').doc(ticketId).get();
+    return ticket.exists
+        ? TicketModel.fromDocument(ticket)
+        : TicketModel(eventId: 0, price: 0, seatNumber: 0);
+  }
+
   Future<EventModel> getEventFromTicket(TicketModel ticket) async {
     var ticketObj = ticket.toDocument();
     final eventObj = await _firestore
@@ -48,7 +66,7 @@ class FirestoreService {
   Future<EventModel> getEventByID(eventId) {
     return _firestore
         .collection('events')
-        .doc(eventId)
+        .doc(eventId.toString())
         .get()
         .then((doc) => EventModel.fromDocument(doc));
   }

@@ -70,7 +70,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   Future<void> loadUpcomingEvent() async {
     upcomingEvent = await FirestoreService().getUpcomingEvent(
         "S8Aa95jYU8MlzBjFUEXit1zbuTP2"); //TODO update with current user id
-    setState(() {});
+    setState(() {
+      print("Got upcoming event: $upcomingEvent");
+      print(upcomingEvent.title);
+    });
   }
 
   final animationsMap = {

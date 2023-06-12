@@ -63,4 +63,21 @@ class EventModel {
       ticketCount: 0,
     );
   }
+
+  factory EventModel.fromJson(Map<String, dynamic> json) {
+    return EventModel(
+      id: json['id'] as int,
+      generatedBy: json['generatedBy'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      location: json['location'] as String,
+      date: json['date']
+          as String, // or use DateTime.parse(json['date']) if the date is a string
+      time: json['time']
+          as String, // or use DateTime.parse(json['time']) if the time is a string
+      photoUrl: json['photoUrl'] as String,
+      ticketCount:
+          json['ticketCount'] as int, // make sure ticketCount is an int
+    );
+  }
 }
