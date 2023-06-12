@@ -159,7 +159,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 ),
               ),
               Row(
-                children: [Expanded(child: EventCard(event: upcomingEvent))],
+                children: [
+                  Expanded(
+                      child: upcomingEvent.title != ''
+                          ? EventCard(event: upcomingEvent)
+                          : Text("No upcoming events")) //TODO update this
+                ],
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,

@@ -13,6 +13,7 @@ class CreateEventModel extends FlutterFlowModel {
   TextEditingController? timeController;
   TextEditingController? ticketCount;
   TextEditingController? id;
+  TextEditingController? ticketPrice;
 
   // String? Function(BuildContext, String?)? emailAddressControllerValidator;
   // // State field(s) for password widget.
@@ -41,5 +42,6 @@ class CreateEventModel extends FlutterFlowModel {
     timeController?.dispose();
     ticketCount?.dispose();
     id?.dispose();
+    ticketPrice?.dispose();
   }
 }

@@ -565,24 +565,35 @@ class _EventPageWidgetState extends State<EventPageWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        FirestoreService().writeTicketToFirestore(TicketModel(
-                            seatNumber: 3,
-                            eventId: event.id,
-                            price: 5)); //TODO update seatsNumber and price
+                        //TODO update seatsNumber and price
+
+                        int soldTickets = await FirestoreService()
+                            .getNumberOfSoldTicketsOfEvent(event.id);
+                        int seatNumber = soldTickets + 1;
+
                         debugPrint("Generating nft...");
+                        // get seller TicketContractLinking
                         TicketingContractLinking
                             ticketingContractLinkingSeller =
                             TicketingContractLinking(
                                 MockCredentials.eventOrganizerPK);
                         await ticketingContractLinkingSeller.initialSetup();
 
+                        // generate nft
                         var ticketIdBlockchain =
                             await ticketingContractLinkingSeller.issueTicket(
-                                event.title, 1, 1, 1, event.date.toString());
+                                event.title,
+                                event.ticketPrice,
+                                event.ticketCount,
+                                seatNumber,
+                                event.date.toString());
+
                         debugPrint(ticketIdBlockchain?.toString());
-                        var selletID = await ticketingContractLinkingSeller
+                        var sellerID = await ticketingContractLinkingSeller
                             .getOwner(ticketIdBlockchain);
-                        debugPrint("Seller id: " + selletID.toString());
+
+                        debugPrint("Seller id: " + sellerID.toString());
+
                         ///////////////////////////////////
                         debugPrint("Buying nft ...");
                         TicketingContractLinking ticketingContractLinkingBuyer =
@@ -591,6 +602,15 @@ class _EventPageWidgetState extends State<EventPageWidget>
                         await ticketingContractLinkingBuyer
                             .buyTicket(ticketIdBlockchain);
                         debugPrint("Nft bought");
+
+                        await FirestoreService()
+                            .writeTicketToFirestore(TicketModel(
+                                seatNumber: seatNumber, //TODO TDB
+                                eventId: event.id,
+                                price: event.ticketPrice,
+                                batchNo: event.ticketCount,
+                                blockchainTicketId: ticketIdBlockchain,
+                                eventName: event.title));
                         /////////////////////
                         ///
                         var ownerID = await ticketingContractLinkingBuyer
@@ -600,7 +620,8 @@ class _EventPageWidgetState extends State<EventPageWidget>
                           'TicketDetails',
                           params: {
                             'ticketDBId': event.id.toString() +
-                                "_1" //TODO edit with seatNumber
+                                "_" +
+                                seatNumber.toString(),
                           },
                           extra: <String, dynamic>{
                             kTransitionInfoKey: TransitionInfo(

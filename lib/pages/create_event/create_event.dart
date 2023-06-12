@@ -99,6 +99,10 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                     controller: _model.ticketCount,
                     labelText: 'Ticket Count',
                     hintText: 'Enter ticket count'),
+                TextInputTile(
+                    controller: _model.ticketPrice,
+                    labelText: 'Ticket Price',
+                    hintText: 'Enter ticket price'),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                   child: FFButtonWidget(
@@ -122,6 +126,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                       } else if (_model.ticketCount?.text == null ||
                           _model.ticketCount?.text == "") {
                         return;
+                      } else if (_model.ticketPrice?.text == null ||
+                          _model.ticketPrice?.text == "") {
+                        return;
                       }
 
                       final numberOfEvents =
@@ -137,7 +144,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                           ticketCount:
                               int.parse(_model.ticketCount?.text ?? "Test"),
                           generatedBy: "Iulian",
-                          photoUrl: 'ign'); //TODO change
+                          photoUrl: 'ign',
+                          ticketPrice: double.parse(
+                              _model.ticketPrice.text)); //TODO change
 
                       await FirestoreService().writeEventToFirestore(newEvent);
                       debugPrint("Event created done");

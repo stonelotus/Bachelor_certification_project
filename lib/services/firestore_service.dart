@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/models/ticket_model.dart';
 import 'package:licenta_main/models/user_model.dart';
-import 'package:licenta_main/pages/events_search_results/events_search_results_widget.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -15,7 +14,7 @@ class FirestoreService {
   Future<void> writeTicketToFirestore(TicketModel ticket) async {
     await _firestore
         .collection('tickets')
-        .doc(ticket.ticketId)
+        .doc(ticket.dbId)
         .set(ticket.toDocument());
   }
 
@@ -39,7 +38,7 @@ class FirestoreService {
     final ticket = await _firestore.collection('tickets').doc(ticketId).get();
     return ticket.exists
         ? TicketModel.fromDocument(ticket)
-        : TicketModel(eventId: 0, price: 0, seatNumber: 0);
+        : TicketModel.empty();
   }
 
   Future<EventModel> getEventFromTicket(TicketModel ticket) async {
@@ -106,6 +105,15 @@ class FirestoreService {
 
   Future<int> getNumberOfEvents() async {
     var res = await _firestore.collection('events').count().get();
+    return res.count;
+  }
+
+  Future<int> getNumberOfSoldTicketsOfEvent(eventID) async {
+    var res = await _firestore
+        .collection('tickets')
+        .where('eventId', isEqualTo: eventID)
+        .count()
+        .get();
     return res.count;
   }
 }
