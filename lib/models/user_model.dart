@@ -6,6 +6,8 @@ class UserModel {
   final String email;
   final String displayName;
   final String? photoUrl;
+  bool isOrganizer;
+  bool isVerified;
   List<dynamic> tickets;
 
   UserModel(
@@ -13,7 +15,9 @@ class UserModel {
       required this.email,
       required this.displayName,
       this.photoUrl,
-      this.tickets = const []});
+      this.tickets = const [],
+      this.isOrganizer = false,
+      this.isVerified = false});
 
   factory UserModel.fromFirebaseUser(User user) {
     return UserModel(
@@ -30,27 +34,34 @@ class UserModel {
       'email': email,
       'displayName': displayName,
       'photoUrl': photoUrl,
-      'tickets': tickets
+      'tickets': tickets,
+      'isOrganizer': isOrganizer,
+      'isVerified': isVerified,
     };
   }
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {
+    print("WTF IS THIS");
+    print(doc.data());
     return UserModel(
       id: doc['id'],
       email: doc['email'],
       displayName: doc['displayName'],
       photoUrl: doc['photoUrl'],
       tickets: doc['tickets'],
+      isOrganizer: doc['isOrganizer'],
+      isVerified: doc['isVerified'],
     );
   }
 
   factory UserModel.empty() {
     return UserModel(
-      id: '',
-      email: '',
-      displayName: '',
-      photoUrl: '',
-      tickets: [],
-    );
+        id: '',
+        email: '',
+        displayName: '',
+        photoUrl: '',
+        tickets: [],
+        isOrganizer: false,
+        isVerified: false);
   }
 }

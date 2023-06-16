@@ -1,7 +1,9 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:licenta_main/models/user_model.dart';
 import 'package:licenta_main/services/auth_service.dart';
+import 'package:licenta_main/services/firestore_service.dart';
 import 'package:web3dart/credentials.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -29,7 +31,6 @@ class LoginPageWidget extends StatefulWidget {
 class _LoginPageWidgetState extends State<LoginPageWidget>
     with TickerProviderStateMixin {
   late LoginPageModel _model;
-  bool _isSigningIn = false;
   final AuthService _authService = AuthService();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -119,6 +120,21 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
     _model.dispose();
 
     super.dispose();
+  }
+
+  // Code for checkbox
+  bool isChecked = false;
+
+  Color getColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    return Colors.red;
   }
 
   @override
@@ -308,597 +324,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                               Expanded(
                                                 child: TabBarView(
                                                   children: [
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0.2, 0.0),
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          24.0,
-                                                                          20.0,
-                                                                          24.0,
-                                                                          0.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                controller: _model
-                                                                    .emailAddressController,
-                                                                obscureText:
-                                                                    false,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  labelText:
-                                                                      'Email Address',
-                                                                  labelStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall,
-                                                                  hintText:
-                                                                      'Enter your email...',
-                                                                  hintStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall,
-                                                                  enabledBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .lineColor,
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  focusedBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: Color(
-                                                                          0x00000000),
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  errorBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  focusedErrorBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  filled: true,
-                                                                  fillColor: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryBackground,
-                                                                  contentPadding:
-                                                                      EdgeInsetsDirectional.fromSTEB(
-                                                                          20.0,
-                                                                          24.0,
-                                                                          20.0,
-                                                                          24.0),
-                                                                ),
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium,
-                                                                validator: _model
-                                                                    .emailAddressControllerValidator
-                                                                    .asValidator(
-                                                                        context),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          24.0,
-                                                                          12.0,
-                                                                          24.0,
-                                                                          0.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                controller: _model
-                                                                    .passwordController,
-                                                                obscureText: !_model
-                                                                    .passwordVisibility,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  labelText:
-                                                                      'Password',
-                                                                  labelStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall,
-                                                                  hintText:
-                                                                      'Enter your password...',
-                                                                  hintStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall,
-                                                                  enabledBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .lineColor,
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  focusedBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: Color(
-                                                                          0x00000000),
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  errorBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  focusedErrorBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      width:
-                                                                          1.0,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                  ),
-                                                                  filled: true,
-                                                                  fillColor: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryBackground,
-                                                                  contentPadding:
-                                                                      EdgeInsetsDirectional.fromSTEB(
-                                                                          20.0,
-                                                                          24.0,
-                                                                          20.0,
-                                                                          24.0),
-                                                                  suffixIcon:
-                                                                      InkWell(
-                                                                    onTap: () =>
-                                                                        setState(
-                                                                      () => _model
-                                                                              .passwordVisibility =
-                                                                          !_model
-                                                                              .passwordVisibility,
-                                                                    ),
-                                                                    focusNode: FocusNode(
-                                                                        skipTraversal:
-                                                                            true),
-                                                                    child: Icon(
-                                                                      _model.passwordVisibility
-                                                                          ? Icons
-                                                                              .visibility_outlined
-                                                                          : Icons
-                                                                              .visibility_off_outlined,
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryText,
-                                                                      size:
-                                                                          20.0,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium,
-                                                                validator: _model
-                                                                    .passwordControllerValidator
-                                                                    .asValidator(
-                                                                        context),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          24.0,
-                                                                          16.0,
-                                                                          24.0,
-                                                                          0.0),
-                                                              child: Wrap(
-                                                                spacing: 24.0,
-                                                                runSpacing: 8.0,
-                                                                alignment:
-                                                                    WrapAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    WrapCrossAlignment
-                                                                        .center,
-                                                                direction: Axis
-                                                                    .horizontal,
-                                                                runAlignment:
-                                                                    WrapAlignment
-                                                                        .center,
-                                                                verticalDirection:
-                                                                    VerticalDirection
-                                                                        .down,
-                                                                clipBehavior:
-                                                                    Clip.none,
-                                                                children: [
-                                                                  FFButtonWidget(
-                                                                    onPressed:
-                                                                        () {
-                                                                      print(
-                                                                          'Button-ForgotPassword pressed ...');
-                                                                    },
-                                                                    text:
-                                                                        'Forgot Password?',
-                                                                    options:
-                                                                        FFButtonOptions(
-                                                                      width:
-                                                                          140.0,
-                                                                      height:
-                                                                          40.0,
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                      iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryBackground,
-                                                                      textStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodySmall
-                                                                          .override(
-                                                                            fontFamily:
-                                                                                'Poppins',
-                                                                            fontSize:
-                                                                                12.0,
-                                                                          ),
-                                                                      elevation:
-                                                                          0.0,
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        color: Colors
-                                                                            .transparent,
-                                                                        width:
-                                                                            1.0,
-                                                                      ),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              50.0),
-                                                                    ),
-                                                                  ),
-                                                                  FFButtonWidget(
-                                                                    onPressed:
-                                                                        () async {
-                                                                      print(
-                                                                          'Button-Login pressed ...');
-
-                                                                      final storage =
-                                                                          new FlutterSecureStorage();
-                                                                      // await storage
-                                                                      //     .deleteAll();
-                                                                      String
-                                                                          pk =
-                                                                          await storage.read(key: "pk") ??
-                                                                              "";
-                                                                      String
-                                                                          publicK =
-                                                                          await storage.read(key: 'publicKey') ??
-                                                                              "";
-                                                                      if (pk ==
-                                                                              "" ||
-                                                                          publicK ==
-                                                                              "") {
-                                                                        GlobalKey
-                                                                            _keyLoader =
-                                                                            GlobalKey();
-
-                                                                        String?
-                                                                            userInputKey =
-                                                                            await showTextInputDialog(context,
-                                                                                _keyLoader);
-                                                                        if (userInputKey !=
-                                                                            null) {
-                                                                          print(
-                                                                              userInputKey.toString());
-                                                                          await storage.write(
-                                                                              key: "pk",
-                                                                              value: userInputKey.toString());
-                                                                          await storage.write(
-                                                                              key: 'publicKey',
-                                                                              value: EthPrivateKey.fromHex(userInputKey.toString()).address.hexEip55);
-                                                                        }
-                                                                      }
-                                                                      context
-                                                                          .pushNamed(
-                                                                        'HomePage',
-                                                                        extra: <
-                                                                            String,
-                                                                            dynamic>{
-                                                                          kTransitionInfoKey:
-                                                                              TransitionInfo(
-                                                                            hasTransition:
-                                                                                true,
-                                                                            transitionType:
-                                                                                PageTransitionType.fade,
-                                                                            duration:
-                                                                                Duration(milliseconds: 500),
-                                                                          ),
-                                                                        },
-                                                                      );
-                                                                    },
-                                                                    text:
-                                                                        'Sign In',
-                                                                    options:
-                                                                        FFButtonOptions(
-                                                                      width:
-                                                                          130.0,
-                                                                      height:
-                                                                          50.0,
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                      iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondary,
-                                                                      textStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .titleSmall
-                                                                          .override(
-                                                                            fontFamily:
-                                                                                'Poppins',
-                                                                            color:
-                                                                                FlutterFlowTheme.of(context).primaryBtnText,
-                                                                          ),
-                                                                      elevation:
-                                                                          3.0,
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        color: Colors
-                                                                            .transparent,
-                                                                        width:
-                                                                            1.0,
-                                                                      ),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              60.0),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          20.0,
-                                                                          0.0,
-                                                                          20.0,
-                                                                          0.0),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            12.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                    child: Text(
-                                                                      'Or use a social account to login',
-                                                                      style: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodySmall,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          4.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            8.0,
-                                                                            8.0,
-                                                                            8.0,
-                                                                            8.0),
-                                                                    child:
-                                                                        FlutterFlowIconButton(
-                                                                      borderColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .lineColor,
-                                                                      borderRadius:
-                                                                          12.0,
-                                                                      borderWidth:
-                                                                          1.0,
-                                                                      buttonSize:
-                                                                          44.0,
-                                                                      icon:
-                                                                          FaIcon(
-                                                                        FontAwesomeIcons
-                                                                            .google,
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .primaryText,
-                                                                        size:
-                                                                            16.0,
-                                                                      ),
-                                                                      onPressed:
-                                                                          () async {
-                                                                        print(
-                                                                            "Google login button pressed");
-                                                                        final User?
-                                                                            user =
-                                                                            await _authService.signInWithGoogle();
-                                                                        print(
-                                                                            user);
-                                                                      },
-                                                                    ),
-                                                                  ),
-                                                                  // Padding(
-                                                                  //   padding: EdgeInsetsDirectional
-                                                                  //       .fromSTEB(
-                                                                  //           8.0,
-                                                                  //           8.0,
-                                                                  //           8.0,
-                                                                  //           8.0),
-                                                                  //   child:
-                                                                  //       FlutterFlowIconButton(
-                                                                  //     borderColor:
-                                                                  //         FlutterFlowTheme.of(context)
-                                                                  //             .lineColor,
-                                                                  //     borderRadius:
-                                                                  //         12.0,
-                                                                  //     borderWidth:
-                                                                  //         1.0,
-                                                                  //     buttonSize:
-                                                                  //         44.0,
-                                                                  //     icon:
-                                                                  //         FaIcon(
-                                                                  //       FontAwesomeIcons
-                                                                  //           .apple,
-                                                                  //       color: FlutterFlowTheme.of(context)
-                                                                  //           .primaryText,
-                                                                  //       size:
-                                                                  //           16.0,
-                                                                  //     ),
-                                                                  //     onPressed:
-                                                                  //         () {
-                                                                  //       print(
-                                                                  //           'IconButton pressed ...');
-                                                                  //     },
-                                                                  //   ),
-                                                                  // ),
-                                                                  // Padding(
-                                                                  //   padding: EdgeInsetsDirectional
-                                                                  //       .fromSTEB(
-                                                                  //           8.0,
-                                                                  //           8.0,
-                                                                  //           8.0,
-                                                                  //           8.0),
-                                                                  //   child:
-                                                                  //       FlutterFlowIconButton(
-                                                                  //     borderColor:
-                                                                  //         FlutterFlowTheme.of(context)
-                                                                  //             .lineColor,
-                                                                  //     borderRadius:
-                                                                  //         12.0,
-                                                                  //     borderWidth:
-                                                                  //         1.0,
-                                                                  //     buttonSize:
-                                                                  //         44.0,
-                                                                  //     icon:
-                                                                  //         Icon(
-                                                                  //       Icons
-                                                                  //           .supervisor_account_outlined,
-                                                                  //       color: FlutterFlowTheme.of(context)
-                                                                  //           .primaryText,
-                                                                  //       size:
-                                                                  //           20.0,
-                                                                  //     ),
-                                                                  //     onPressed:
-                                                                  //         () {
-                                                                  //       print(
-                                                                  //           'IconButton pressed ...');
-                                                                  //     },
-                                                                  //   ),
-                                                                  // ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    SignInTab(
+                                                        model: _model,
+                                                        authService:
+                                                            _authService),
                                                     SingleChildScrollView(
                                                       child: Column(
                                                         mainAxisSize:
@@ -1135,6 +564,45 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                             ),
                                                           ),
                                                           Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          24.0,
+                                                                          12.0,
+                                                                          24.0,
+                                                                          0.0),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                      "I am an organizer"),
+                                                                  Checkbox(
+                                                                    checkColor:
+                                                                        Colors
+                                                                            .white,
+                                                                    fillColor: MaterialStateProperty
+                                                                        .resolveWith(
+                                                                            getColor),
+                                                                    value:
+                                                                        isChecked,
+                                                                    onChanged:
+                                                                        (bool?
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        isChecked =
+                                                                            value!;
+                                                                      });
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              )),
+                                                          Padding(
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
@@ -1144,9 +612,34 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                                         0.0),
                                                             child:
                                                                 FFButtonWidget(
-                                                              onPressed: () {
+                                                              onPressed:
+                                                                  () async {
                                                                 print(
-                                                                    'Button-Login pressed ...');
+                                                                    'Button-SIGN UP pressed ...');
+                                                                if (isChecked ==
+                                                                    false) {
+                                                                  var response = await AuthService().signUpWithEmailAndPassword(
+                                                                      _model
+                                                                          .emailAddressCreateController
+                                                                          .text,
+                                                                      _model
+                                                                          .passwordCreateController
+                                                                          .text);
+                                                                  print("SIGN UP STATUS: " +
+                                                                      response
+                                                                          .toString());
+                                                                } else {
+                                                                  var response = await AuthService().signUpWithEmailAndPasswordOrganizer(
+                                                                      _model
+                                                                          .emailAddressCreateController
+                                                                          .text,
+                                                                      _model
+                                                                          .passwordCreateController
+                                                                          .text);
+                                                                  print("SIGN UP STATUS: " +
+                                                                      response
+                                                                          .toString());
+                                                                }
                                                               },
                                                               text:
                                                                   'Create Account',
@@ -1219,7 +712,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                                           0.0,
                                                                           0.0),
                                                                   child: Text(
-                                                                    'Sign up using a social account',
+                                                                    isChecked
+                                                                        ? 'Social account sign up is not available \nfor Organizers'
+                                                                        : 'Sign up using a social account',
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodySmall,
@@ -1228,129 +723,125 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                               ],
                                                             ),
                                                           ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        4.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Padding(
+                                                          isChecked == false
+                                                              ? Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          8.0,
-                                                                          8.0,
-                                                                          8.0,
-                                                                          8.0),
-                                                                  child:
-                                                                      FlutterFlowIconButton(
-                                                                    borderColor:
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .lineColor,
-                                                                    borderRadius:
-                                                                        12.0,
-                                                                    borderWidth:
-                                                                        1.0,
-                                                                    buttonSize:
-                                                                        44.0,
-                                                                    icon:
-                                                                        FaIcon(
-                                                                      FontAwesomeIcons
-                                                                          .google,
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primaryText,
-                                                                      size:
-                                                                          16.0,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      print(
-                                                                          'IconButton pressed ...');
-                                                                    },
+                                                                          0.0,
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            8.0,
+                                                                            8.0,
+                                                                            8.0,
+                                                                            8.0),
+                                                                        child:
+                                                                            FlutterFlowIconButton(
+                                                                          borderColor:
+                                                                              FlutterFlowTheme.of(context).lineColor,
+                                                                          borderRadius:
+                                                                              12.0,
+                                                                          borderWidth:
+                                                                              1.0,
+                                                                          buttonSize:
+                                                                              44.0,
+                                                                          icon:
+                                                                              FaIcon(
+                                                                            FontAwesomeIcons.google,
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryText,
+                                                                            size:
+                                                                                16.0,
+                                                                          ),
+                                                                          onPressed:
+                                                                              () {
+                                                                            print('IconButton pressed ...');
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                      // Padding(
+                                                                      //   padding: EdgeInsetsDirectional
+                                                                      //       .fromSTEB(
+                                                                      //           8.0,
+                                                                      //           8.0,
+                                                                      //           8.0,
+                                                                      //           8.0),
+                                                                      //   child:
+                                                                      //       FlutterFlowIconButton(
+                                                                      //     borderColor:
+                                                                      //         FlutterFlowTheme.of(context)
+                                                                      //             .lineColor,
+                                                                      //     borderRadius:
+                                                                      //         12.0,
+                                                                      //     borderWidth:
+                                                                      //         1.0,
+                                                                      //     buttonSize:
+                                                                      //         44.0,
+                                                                      //     icon:
+                                                                      //         FaIcon(
+                                                                      //       FontAwesomeIcons
+                                                                      //           .apple,
+                                                                      //       color: FlutterFlowTheme.of(
+                                                                      //               context)
+                                                                      //           .primaryText,
+                                                                      //       size:
+                                                                      //           16.0,
+                                                                      //     ),
+                                                                      //     onPressed:
+                                                                      //         () {
+                                                                      //       print(
+                                                                      //           'IconButton pressed ...');
+                                                                      //     },
+                                                                      //   ),
+                                                                      // ),
+                                                                      // Padding(
+                                                                      //   padding: EdgeInsetsDirectional
+                                                                      //       .fromSTEB(
+                                                                      //           8.0,
+                                                                      //           8.0,
+                                                                      //           8.0,
+                                                                      //           8.0),
+                                                                      //   child:
+                                                                      //       FlutterFlowIconButton(
+                                                                      //     borderColor:
+                                                                      //         FlutterFlowTheme.of(context)
+                                                                      //             .lineColor,
+                                                                      //     borderRadius:
+                                                                      //         12.0,
+                                                                      //     borderWidth:
+                                                                      //         1.0,
+                                                                      //     buttonSize:
+                                                                      //         44.0,
+                                                                      //     icon: Icon(
+                                                                      //       Icons
+                                                                      //           .supervisor_account_outlined,
+                                                                      //       color: FlutterFlowTheme.of(
+                                                                      //               context)
+                                                                      //           .primaryText,
+                                                                      //       size:
+                                                                      //           20.0,
+                                                                      //     ),
+                                                                      //     onPressed:
+                                                                      //         () {
+                                                                      //       print(
+                                                                      //           'IconButton pressed ...');
+                                                                      //     },
+                                                                      //   ),
+                                                                      // ),
+                                                                    ],
                                                                   ),
-                                                                ),
-                                                                // Padding(
-                                                                //   padding: EdgeInsetsDirectional
-                                                                //       .fromSTEB(
-                                                                //           8.0,
-                                                                //           8.0,
-                                                                //           8.0,
-                                                                //           8.0),
-                                                                //   child:
-                                                                //       FlutterFlowIconButton(
-                                                                //     borderColor:
-                                                                //         FlutterFlowTheme.of(context)
-                                                                //             .lineColor,
-                                                                //     borderRadius:
-                                                                //         12.0,
-                                                                //     borderWidth:
-                                                                //         1.0,
-                                                                //     buttonSize:
-                                                                //         44.0,
-                                                                //     icon:
-                                                                //         FaIcon(
-                                                                //       FontAwesomeIcons
-                                                                //           .apple,
-                                                                //       color: FlutterFlowTheme.of(
-                                                                //               context)
-                                                                //           .primaryText,
-                                                                //       size:
-                                                                //           16.0,
-                                                                //     ),
-                                                                //     onPressed:
-                                                                //         () {
-                                                                //       print(
-                                                                //           'IconButton pressed ...');
-                                                                //     },
-                                                                //   ),
-                                                                // ),
-                                                                // Padding(
-                                                                //   padding: EdgeInsetsDirectional
-                                                                //       .fromSTEB(
-                                                                //           8.0,
-                                                                //           8.0,
-                                                                //           8.0,
-                                                                //           8.0),
-                                                                //   child:
-                                                                //       FlutterFlowIconButton(
-                                                                //     borderColor:
-                                                                //         FlutterFlowTheme.of(context)
-                                                                //             .lineColor,
-                                                                //     borderRadius:
-                                                                //         12.0,
-                                                                //     borderWidth:
-                                                                //         1.0,
-                                                                //     buttonSize:
-                                                                //         44.0,
-                                                                //     icon: Icon(
-                                                                //       Icons
-                                                                //           .supervisor_account_outlined,
-                                                                //       color: FlutterFlowTheme.of(
-                                                                //               context)
-                                                                //           .primaryText,
-                                                                //       size:
-                                                                //           20.0,
-                                                                //     ),
-                                                                //     onPressed:
-                                                                //         () {
-                                                                //       print(
-                                                                //           'IconButton pressed ...');
-                                                                //     },
-                                                                //   ),
-                                                                // ),
-                                                              ],
-                                                            ),
-                                                          ),
+                                                                )
+                                                              : Container(),
                                                         ],
                                                       ),
                                                     ),
@@ -1384,6 +875,354 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                     ),
                   ),
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SignInTab extends StatefulWidget {
+  const SignInTab({
+    Key? key,
+    required LoginPageModel model,
+    required AuthService authService,
+  })  : _model = model,
+        _authService = authService,
+        super(key: key);
+
+  final LoginPageModel _model;
+  final AuthService _authService;
+
+  @override
+  State<SignInTab> createState() => _SignInTabState();
+}
+
+class _SignInTabState extends State<SignInTab> {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional(0.2, 0.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 20.0, 24.0, 0.0),
+              child: TextFormField(
+                controller: widget._model.emailAddressController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Email Address',
+                  labelStyle: FlutterFlowTheme.of(context).bodySmall,
+                  hintText: 'Enter your email...',
+                  hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).lineColor,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0x00000000),
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  filled: true,
+                  fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 20.0, 24.0),
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium,
+                validator: widget._model.emailAddressControllerValidator
+                    .asValidator(context),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 12.0, 24.0, 0.0),
+              child: TextFormField(
+                controller: widget._model.passwordController,
+                obscureText: !widget._model.passwordVisibility,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: FlutterFlowTheme.of(context).bodySmall,
+                  hintText: 'Enter your password...',
+                  hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).lineColor,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0x00000000),
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  filled: true,
+                  fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 20.0, 24.0),
+                  suffixIcon: InkWell(
+                    onTap: () => setState(
+                      () => widget._model.passwordVisibility =
+                          !widget._model.passwordVisibility,
+                    ),
+                    focusNode: FocusNode(skipTraversal: true),
+                    child: Icon(
+                      widget._model.passwordVisibility
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      size: 20.0,
+                    ),
+                  ),
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium,
+                validator: widget._model.passwordControllerValidator
+                    .asValidator(context),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 0.0),
+              child: Wrap(
+                spacing: 24.0,
+                runSpacing: 8.0,
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                direction: Axis.horizontal,
+                runAlignment: WrapAlignment.center,
+                verticalDirection: VerticalDirection.down,
+                clipBehavior: Clip.none,
+                children: [
+                  FFButtonWidget(
+                    onPressed: () {
+                      print('Button-ForgotPassword pressed ...');
+                    },
+                    text: 'Forgot Password?',
+                    options: FFButtonOptions(
+                      width: 140.0,
+                      height: 40.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      iconPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      textStyle:
+                          FlutterFlowTheme.of(context).bodySmall.override(
+                                fontFamily: 'Poppins',
+                                fontSize: 12.0,
+                              ),
+                      elevation: 0.0,
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                  ),
+                  FFButtonWidget(
+                    onPressed: () async {
+                      print('Button-Login pressed ...');
+                      final dbUser = await AuthService()
+                          .signInWithEmailAndPassword(
+                              widget._model.emailAddressController.text,
+                              widget._model.passwordController.text);
+                      if (dbUser == null) {
+                        return;
+                      }
+                      final storage = new FlutterSecureStorage();
+                      // await storage
+                      //     .deleteAll();
+                      String pk = await storage.read(key: "pk") ?? "";
+                      String publicK =
+                          await storage.read(key: 'publicKey') ?? "";
+                      if (pk == "" || publicK == "") {
+                        GlobalKey _keyLoader = GlobalKey();
+
+                        String? userInputKey =
+                            await showTextInputDialog(context, _keyLoader);
+                        if (userInputKey != null) {
+                          print(userInputKey.toString());
+                          await storage.write(
+                              key: "pk", value: userInputKey.toString());
+                          await storage.write(
+                              key: 'publicKey',
+                              value:
+                                  EthPrivateKey.fromHex(userInputKey.toString())
+                                      .address
+                                      .hexEip55);
+                        }
+                      }
+
+                      final user =
+                          (await FirestoreService().getUser(dbUser.uid));
+                      var nextPath = "";
+                      if (user.isOrganizer == true) {
+                        print("is organizer");
+                        if (user.isVerified == true) {
+                          nextPath = "OrganizerHomePage";
+                        }
+                      } else {
+                        print("is fan");
+                        nextPath = "HomePage";
+                      }
+                      if (nextPath == "") {
+                        return;
+                      }
+                      context.pushNamed(
+                        nextPath,
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 500),
+                          ),
+                        },
+                      );
+                    },
+                    text: 'Sign In',
+                    options: FFButtonOptions(
+                      width: 130.0,
+                      height: 50.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      iconPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: FlutterFlowTheme.of(context).secondary,
+                      textStyle: FlutterFlowTheme.of(context)
+                          .titleSmall
+                          .override(
+                            fontFamily: 'Poppins',
+                            color: FlutterFlowTheme.of(context).primaryBtnText,
+                          ),
+                      elevation: 3.0,
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                    child: Text(
+                      'Or use a social account to login',
+                      style: FlutterFlowTheme.of(context).bodySmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                    child: FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).lineColor,
+                      borderRadius: 12.0,
+                      borderWidth: 1.0,
+                      buttonSize: 44.0,
+                      icon: FaIcon(
+                        FontAwesomeIcons.google,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 16.0,
+                      ),
+                      onPressed: () async {
+                        print("Google login button pressed");
+                        final User? user =
+                            await widget._authService.signInWithGoogle();
+                        print(user);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                    child: FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).lineColor,
+                      borderRadius: 12.0,
+                      borderWidth: 1.0,
+                      buttonSize: 44.0,
+                      icon: FaIcon(
+                        FontAwesomeIcons.apple,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 16.0,
+                      ),
+                      onPressed: () {
+                        print('IconButton pressed ...');
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                    child: FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).lineColor,
+                      borderRadius: 12.0,
+                      borderWidth: 1.0,
+                      buttonSize: 44.0,
+                      icon: Icon(
+                        Icons.supervisor_account_outlined,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 20.0,
+                      ),
+                      onPressed: () {
+                        print('IconButton pressed ...');
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
