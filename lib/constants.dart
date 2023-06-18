@@ -10,6 +10,12 @@ class NavigationRouteIDs {
     'MyTickets', // index 2
     'TicketValidator'
   ];
+  static const List<String> organizerRouteIDs = [
+    'OrganizerHomePage', // index 0
+    'MyEvents', // index 1
+    // 'MyTickets', // index 2
+    'TicketValidator'
+  ];
 }
 
 class BottomNavBarNavigationItems {
@@ -19,6 +25,13 @@ class BottomNavBarNavigationItems {
     TabItem(icon: Icons.home, title: 'Home'),
     TabItem(icon: Icons.map, title: 'Discovery'),
     TabItem(icon: Icons.self_improvement, title: 'My Tickets'),
+    TabItem(icon: Icons.person, title: 'Validator'),
+  ];
+
+  static const List<TabItem> organizerNavigationItems = [
+    TabItem(icon: Icons.home, title: 'Home'),
+    TabItem(icon: Icons.map, title: 'My events'),
+    // TabItem(icon: Icons.self_improvement, title: 'My Tickets'),
     TabItem(icon: Icons.person, title: 'Validator'),
   ];
 }

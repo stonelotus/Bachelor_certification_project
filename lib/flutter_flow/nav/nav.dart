@@ -6,6 +6,8 @@ import 'package:licenta_main/flutter_flow/flutter_flow_util.dart';
 import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/pages/create_event/create_event.dart';
 import 'package:licenta_main/pages/home_page/home_page_widget.dart';
+import 'package:licenta_main/pages/my_events_page/my_events_widget.dart';
+import 'package:licenta_main/pages/organizer_home_page/organizer_home_page_widget.dart';
 import 'package:licenta_main/pages/ticket_validator.dart';
 import 'package:licenta_main/pages/tickets_list/tickets_list_widget.dart';
 import 'package:page_transition/page_transition.dart';
@@ -68,6 +70,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => HomePageWidget(),
             ),
             FFRoute(
+              name: 'OrganizerHomePage',
+              path: 'organizerHomePage',
+              builder: (context, params) => OrganizerHomePageWidget(),
+            ),
+            FFRoute(
               name: 'EventPage',
               path: 'eventPage',
               builder: (context, params) => EventPageWidget(),
@@ -89,6 +96,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'EventSearchResults',
               path: 'eventsSearchResults',
               builder: (context, params) => EventsSearchResultsWidget(),
+            ),
+            FFRoute(
+              name: 'MyEvents',
+              path: 'myEvents',
+              builder: (context, params) => MyEventsWidget(),
             ),
             FFRoute(
               name: 'loginPage',

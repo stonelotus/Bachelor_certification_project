@@ -265,42 +265,42 @@ class _SignUpTabState extends State<SignUpTab> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
-                        child: FlutterFlowIconButton(
-                          borderColor: FlutterFlowTheme.of(context).lineColor,
-                          borderRadius: 12.0,
-                          borderWidth: 1.0,
-                          buttonSize: 44.0,
-                          icon: FaIcon(
-                            FontAwesomeIcons.apple,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 16.0,
-                          ),
-                          onPressed: () {
-                            print('IconButton pressed ...');
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
-                        child: FlutterFlowIconButton(
-                          borderColor: FlutterFlowTheme.of(context).lineColor,
-                          borderRadius: 12.0,
-                          borderWidth: 1.0,
-                          buttonSize: 44.0,
-                          icon: Icon(
-                            Icons.supervisor_account_outlined,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 20.0,
-                          ),
-                          onPressed: () {
-                            print('IconButton pressed ...');
-                          },
-                        ),
-                      ),
+                      // Padding(
+                      //   padding:
+                      //       EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                      //   child: FlutterFlowIconButton(
+                      //     borderColor: FlutterFlowTheme.of(context).lineColor,
+                      //     borderRadius: 12.0,
+                      //     borderWidth: 1.0,
+                      //     buttonSize: 44.0,
+                      //     icon: FaIcon(
+                      //       FontAwesomeIcons.apple,
+                      //       color: FlutterFlowTheme.of(context).primaryText,
+                      //       size: 16.0,
+                      //     ),
+                      //     onPressed: () {
+                      //       print('IconButton pressed ...');
+                      //     },
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding:
+                      //       EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                      //   child: FlutterFlowIconButton(
+                      //     borderColor: FlutterFlowTheme.of(context).lineColor,
+                      //     borderRadius: 12.0,
+                      //     borderWidth: 1.0,
+                      //     buttonSize: 44.0,
+                      //     icon: Icon(
+                      //       Icons.supervisor_account_outlined,
+                      //       color: FlutterFlowTheme.of(context).primaryText,
+                      //       size: 20.0,
+                      //     ),
+                      //     onPressed: () {
+                      //       print('IconButton pressed ...');
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                 )

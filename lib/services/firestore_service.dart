@@ -129,4 +129,12 @@ class FirestoreService {
         .doc(eventId.toString())
         .update({'ticketsAvailable': ticketsAvailable});
   }
+
+  Future<List<EventModel>> getEventsByOrganizerDisplayName(displayName) async {
+    final event = await _firestore
+        .collection('events')
+        .where('generatedBy', isEqualTo: displayName)
+        .get();
+    return event.docs.map((doc) => EventModel.fromDocument(doc)).toList();
+  }
 }

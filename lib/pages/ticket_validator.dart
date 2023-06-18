@@ -6,7 +6,9 @@ import 'package:licenta_main/flutter_flow/flutter_flow_theme.dart';
 import 'package:licenta_main/flutter_flow/flutter_flow_util.dart';
 import 'package:licenta_main/services/ticket_contract_linking.dart';
 import 'package:licenta_main/services/ticketing.dart';
+import 'package:licenta_main/widgets/bottom_nav_magic.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:licenta_main/main.dart';
 
 class TicketValidator extends StatefulWidget {
   @override
@@ -96,23 +98,12 @@ class _TicketValidatorState extends State<TicketValidator> {
           ),
         ],
       ),
-      bottomNavigationBar: ConvexAppBar(
-        items: BottomNavBarNavigationItems.navigationItems,
-        initialActiveIndex: 3,
-        onTap: (int i) => {
-          debugPrint("Switching to screen: $i"),
-          context.pushNamed(
-            NavigationRouteIDs.routeIDs[i],
-            extra: <String, dynamic>{
-              kTransitionInfoKey: TransitionInfo(
-                hasTransition: true,
-                transitionType: PageTransitionType.fade,
-                duration: Duration(milliseconds: 500),
-              ),
-            },
-          )
-        },
-      ),
+      bottomNavigationBar: globalUser?.isOrganizer ?? false
+          ? BottomNavMagic(initialIndex: 2, user: true)
+          : BottomNavMagic(
+              initialIndex: 3,
+              user: false,
+            ),
     );
   }
 

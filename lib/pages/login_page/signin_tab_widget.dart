@@ -21,6 +21,8 @@ import 'package:provider/provider.dart';
 import 'login_page_model.dart';
 export 'login_page_model.dart';
 
+import 'package:licenta_main/main.dart';
+
 class SignInTab extends StatefulWidget {
   const SignInTab({
     Key? key,
@@ -233,6 +235,8 @@ class _SignInTabState extends State<SignInTab> {
                       final user =
                           (await FirestoreService().getUser(dbUser.uid));
                       var nextPath = "";
+                      globalUser = user;
+
                       if (user.isOrganizer == true) {
                         print("is organizer");
                         if (user.isVerified == true) {
@@ -325,40 +329,40 @@ class _SignInTabState extends State<SignInTab> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
-                    child: FlutterFlowIconButton(
-                      borderColor: FlutterFlowTheme.of(context).lineColor,
-                      borderRadius: 12.0,
-                      borderWidth: 1.0,
-                      buttonSize: 44.0,
-                      icon: FaIcon(
-                        FontAwesomeIcons.apple,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 16.0,
-                      ),
-                      onPressed: () {
-                        print('IconButton pressed ...');
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
-                    child: FlutterFlowIconButton(
-                      borderColor: FlutterFlowTheme.of(context).lineColor,
-                      borderRadius: 12.0,
-                      borderWidth: 1.0,
-                      buttonSize: 44.0,
-                      icon: Icon(
-                        Icons.supervisor_account_outlined,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 20.0,
-                      ),
-                      onPressed: () {
-                        print('IconButton pressed ...');
-                      },
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                  //   child: FlutterFlowIconButton(
+                  //     borderColor: FlutterFlowTheme.of(context).lineColor,
+                  //     borderRadius: 12.0,
+                  //     borderWidth: 1.0,
+                  //     buttonSize: 44.0,
+                  //     icon: FaIcon(
+                  //       FontAwesomeIcons.apple,
+                  //       color: FlutterFlowTheme.of(context).primaryText,
+                  //       size: 16.0,
+                  //     ),
+                  //     onPressed: () {
+                  //       print('IconButton pressed ...');
+                  //     },
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                  //   child: FlutterFlowIconButton(
+                  //     borderColor: FlutterFlowTheme.of(context).lineColor,
+                  //     borderRadius: 12.0,
+                  //     borderWidth: 1.0,
+                  //     buttonSize: 44.0,
+                  //     icon: Icon(
+                  //       Icons.supervisor_account_outlined,
+                  //       color: FlutterFlowTheme.of(context).primaryText,
+                  //       size: 20.0,
+                  //     ),
+                  //     onPressed: () {
+                  //       print('IconButton pressed ...');
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),
