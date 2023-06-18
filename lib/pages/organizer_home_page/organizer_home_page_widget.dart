@@ -140,7 +140,7 @@ class _OrganizerHomePageWidget extends State<OrganizerHomePageWidget> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Image.asset(
-                    'assets/images/4183289.jpg',
+                    'assets/images/big_nice_pumpkin.png',
                     width: double.infinity,
                     height: 200,
                     fit: BoxFit.cover,
@@ -153,7 +153,7 @@ class _OrganizerHomePageWidget extends State<OrganizerHomePageWidget> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                     child: Text(
-                      'Hello there, Iulian ',
+                      'Hello there, ' + globalUser.displayName,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Poppins',
                             color: Color(0x7BFFFFFF),

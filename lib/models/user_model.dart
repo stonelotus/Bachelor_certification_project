@@ -50,7 +50,7 @@ class UserModel {
       photoUrl: doc['photoUrl'],
       tickets: doc['tickets'],
       isOrganizer: doc['isOrganizer'],
-      isVerified: doc['isVerified'],
+      isVerified: (doc.data() as Map<String, dynamic>)?['isVerified'] ?? false,
     );
   }
 

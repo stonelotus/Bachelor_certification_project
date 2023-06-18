@@ -167,12 +167,24 @@ class _EventPageWidgetState extends State<EventPageWidget>
                 width: double.infinity,
                 child: Stack(
                   children: [
-                    Image.asset(
-                      'assets/images/4183289.jpg',
-                      width: double.infinity,
-                      height: 250.0,
-                      fit: BoxFit.cover,
-                    ),
+                    event.photoUrl != null &&
+                            event.photoUrl != "" &&
+                            Uri.tryParse(event.photoUrl ?? "rip")
+                                    ?.hasAbsolutePath ==
+                                true
+                        ? Image.network(
+                            event.photoUrl.toString(),
+                            width: double.infinity,
+                            height: 250.0,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.topCenter,
+                          )
+                        : Image.asset(
+                            'assets/images/4183289.jpg',
+                            width: double.infinity,
+                            height: 250.0,
+                            fit: BoxFit.cover,
+                          ),
                     Container(
                       height: 200.0,
                       decoration: BoxDecoration(),

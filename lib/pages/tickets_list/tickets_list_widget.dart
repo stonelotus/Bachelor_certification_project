@@ -3,6 +3,7 @@ import 'package:licenta_main/constants.dart';
 import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/models/ticket_model.dart';
 import 'package:licenta_main/services/firestore_service.dart';
+import 'package:licenta_main/widgets/bottom_nav_magic.dart';
 
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -64,85 +65,69 @@ class _TicketsListWidgetState extends State<TicketsListWidget> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: Color(0xFF1D0526),
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SelectionArea(
-                        child: Text(
-                      'My Tickets',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Poppins',
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                    )),
-                    FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 30,
-                      borderWidth: 1,
-                      buttonSize: 40,
-                      fillColor: Color(0x34FFFFFF),
-                      icon: Icon(
-                        Icons.ios_share,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      onPressed: () {
-                        print('IconButton pressed ...');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-                  child: Stack(
+          key: scaffoldKey,
+          backgroundColor: Color(0xFF1D0526),
+          body: SafeArea(
+            top: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
-                        child: ListView.builder(
-                          itemCount: _tickets.length,
-                          itemBuilder: (context, index) {
-                            return TicketWidget(ticket: _tickets[index]);
-                          },
+                      SelectionArea(
+                          child: Text(
+                        'My Tickets',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                      )),
+                      FlutterFlowIconButton(
+                        borderColor: Colors.transparent,
+                        borderRadius: 30,
+                        borderWidth: 1,
+                        buttonSize: 40,
+                        fillColor: Color(0x34FFFFFF),
+                        icon: Icon(
+                          Icons.ios_share,
+                          color: Colors.white,
+                          size: 20,
                         ),
+                        onPressed: () {
+                          print('IconButton pressed ...');
+                        },
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: ConvexAppBar(
-          items: BottomNavBarNavigationItems.navigationItems,
-          initialActiveIndex: 2,
-          onTap: (int i) => {
-            debugPrint("Switching to screen: $i"),
-            context.pushNamed(
-              NavigationRouteIDs.routeIDs[i],
-              extra: <String, dynamic>{
-                kTransitionInfoKey: TransitionInfo(
-                  hasTransition: true,
-                  transitionType: PageTransitionType.fade,
-                  duration: Duration(milliseconds: 500),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
+                          child: ListView.builder(
+                            itemCount: _tickets.length,
+                            itemBuilder: (context, index) {
+                              return TicketWidget(ticket: _tickets[index]);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              },
-            )
-          },
-        ),
-      ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: BottomNavMagic(initialIndex: 2, user: false)),
     );
   }
 }
@@ -213,14 +198,24 @@ class TicketWidget extends StatelessWidget {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: Image.asset(
-                            'assets/images/4183289.jpg',
-                            width: double.infinity,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                            borderRadius: BorderRadius.circular(30),
+                            child: event.photoUrl != null &&
+                                    event.photoUrl != "" &&
+                                    Uri.tryParse(event.photoUrl ?? "rip")
+                                            ?.hasAbsolutePath ==
+                                        true
+                                ? Image.network(
+                                    event.photoUrl.toString(),
+                                    width: double.infinity,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/big_nice_pumpkin.png',
+                                    width: double.infinity,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  )),
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),

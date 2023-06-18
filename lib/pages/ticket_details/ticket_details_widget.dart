@@ -145,12 +145,19 @@ class _TicketDetailsWidgetState extends State<TicketDetailsWidget> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(30.0),
-                                            child: Image.asset(
-                                              'assets/images/4183289.jpg',
-                                              width: double.infinity,
-                                              height: 200.0,
-                                              fit: BoxFit.cover,
-                                            ),
+                                            child: event.photoUrl != ""
+                                                ? Image.network(
+                                                    event.photoUrl.toString(),
+                                                    width: double.infinity,
+                                                    height: 200.0,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Image.asset(
+                                                    'assets/images/big_nice_pumpkin.jpg',
+                                                    width: double.infinity,
+                                                    height: 200.0,
+                                                    fit: BoxFit.cover,
+                                                  ),
                                           ),
                                         ),
                                         Padding(

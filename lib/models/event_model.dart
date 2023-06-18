@@ -37,6 +37,8 @@ class EventModel {
       'time': time,
       'photoUrl': photoUrl,
       'ticketCount': ticketCount,
+      'ticketPrice': ticketPrice,
+      'ticketsAvailable': ticketsAvailable,
     };
   }
 

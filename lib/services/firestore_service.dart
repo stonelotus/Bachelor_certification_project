@@ -71,7 +71,7 @@ class FirestoreService {
   }
 
   Future<void> writeEventToFirestore(EventModel event) async {
-    await _firestore
+    return await _firestore
         .collection('events')
         .doc(event.id.toString())
         .set(event.toDocument());

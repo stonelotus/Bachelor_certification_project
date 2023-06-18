@@ -76,6 +76,7 @@ dependencies:
   cool_alert: ^1.1.0
   rive: ^0.9.1
   flutter_secure_storage: ^8.0.0
+  pointycastle: ^3.7.3
 
 
 dev_dependencies:

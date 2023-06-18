@@ -2,6 +2,7 @@ import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:licenta_main/constants.dart';
 import 'package:licenta_main/models/event_model.dart';
 import 'package:licenta_main/services/firestore_service.dart';
+import 'package:licenta_main/widgets/bottom_nav_magic.dart';
 import 'package:licenta_main/widgets/event_card.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -127,211 +128,194 @@ class _EventsSearchResultsWidgetState extends State<EventsSearchResultsWidget>
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
-          key: scaffoldKey,
-          backgroundColor: Color(0xFF1D0526),
-          body: SafeArea(
-            top: true,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 22.0,
-                  decoration: BoxDecoration(),
-                ).animateOnPageLoad(
-                    animationsMap['containerOnPageLoadAnimation1']!),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(),
-                  child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
-                    child: TextFormField(
-                      controller: _model.textController,
-                      onChanged: (_) => EasyDebounce.debounce(
-                        '_model.textController',
-                        Duration(milliseconds: 2000),
-                        () => setState(() {}),
-                      ),
-                      autofocus: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        hintText: 'Search event',
-                        hintStyle: GoogleFonts.getFont(
-                          'Inter',
-                          color: Color(0xFF4F4F71),
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14.0,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedErrorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFF161630),
-                        contentPadding: EdgeInsetsDirectional.fromSTEB(
-                            0.0, 20.0, 0.0, 20.0),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Color(0xFF4F4F71),
-                          size: 14.0,
-                        ),
-                        suffixIcon: _model.textController!.text.isNotEmpty
-                            ? InkWell(
-                                onTap: () async {
-                                  _model.textController?.clear();
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.clear,
-                                  color: Color(0xFF4F4F71),
-                                  size: 18.0,
-                                ),
-                              )
-                            : null,
-                      ),
-                      style: GoogleFonts.getFont(
+        key: scaffoldKey,
+        backgroundColor: Color(0xFF1D0526),
+        body: SafeArea(
+          top: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 22.0,
+                decoration: BoxDecoration(),
+              ).animateOnPageLoad(
+                  animationsMap['containerOnPageLoadAnimation1']!),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(),
+                child: Padding(
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
+                  child: TextFormField(
+                    controller: _model.textController,
+                    onChanged: (_) => EasyDebounce.debounce(
+                      '_model.textController',
+                      Duration(milliseconds: 2000),
+                      () => setState(() {}),
+                    ),
+                    autofocus: true,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      hintText: 'Search event',
+                      hintStyle: GoogleFonts.getFont(
                         'Inter',
-                        color: Colors.white,
+                        color: Color(0xFF4F4F71),
                         fontWeight: FontWeight.normal,
                         fontSize: 14.0,
                       ),
-                      validator:
-                          _model.textControllerValidator.asValidator(context),
-                    ),
-                  ),
-                ).animateOnPageLoad(
-                    animationsMap['containerOnPageLoadAnimation2']!),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
-                        child: FlutterFlowChoiceChips(
-                          options: [
-                            ChipData('Electronic'),
-                            ChipData('Rock'),
-                            ChipData('Reggaeton'),
-                            ChipData('Classical'),
-                            ChipData('Folk'),
-                            ChipData('Metal')
-                          ],
-                          onChanged: (val) =>
-                              setState(() => _model.choiceChipsValues = val),
-                          selectedChipStyle: ChipStyle(
-                            backgroundColor: Color(0xFF6958FE),
-                            textStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                            iconColor: Colors.white,
-                            iconSize: 18.0,
-                            elevation: 4.0,
-                          ),
-                          unselectedChipStyle: ChipStyle(
-                            backgroundColor: Color(0xFF161630),
-                            textStyle:
-                                FlutterFlowTheme.of(context).bodySmall.override(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFF4F4F71),
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                            iconColor: Color(0xFFE3E7ED),
-                            iconSize: 18.0,
-                            elevation: 0.0,
-                          ),
-                          chipSpacing: 12.0,
-                          multiselect: true,
-                          initialized: _model.choiceChipsValues != null,
-                          alignment: WrapAlignment.start,
-                          controller: _model.choiceChipsValueController ??=
-                              FormFieldController<List<String>>(
-                            [],
-                          ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1.0,
                         ),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    ],
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFF161630),
+                      contentPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Color(0xFF4F4F71),
+                        size: 14.0,
+                      ),
+                      suffixIcon: _model.textController!.text.isNotEmpty
+                          ? InkWell(
+                              onTap: () async {
+                                _model.textController?.clear();
+                                setState(() {});
+                              },
+                              child: Icon(
+                                Icons.clear,
+                                color: Color(0xFF4F4F71),
+                                size: 18.0,
+                              ),
+                            )
+                          : null,
+                    ),
+                    style: GoogleFonts.getFont(
+                      'Inter',
+                      color: Colors.white,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14.0,
+                    ),
+                    validator:
+                        _model.textControllerValidator.asValidator(context),
                   ),
-                ).animateOnPageLoad(animationsMap['rowOnPageLoadAnimation']!),
-                Column(
+                ),
+              ).animateOnPageLoad(
+                  animationsMap['containerOnPageLoadAnimation2']!),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              16.0, 0.0, 16.0, 0.0),
-                          child: Text(
-                            'Latest Events',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                ),
-                          ).animateOnPageLoad(
-                              animationsMap['textOnPageLoadAnimation']!),
+                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                      child: FlutterFlowChoiceChips(
+                        options: [
+                          ChipData('Electronic'),
+                          ChipData('Rock'),
+                          ChipData('Reggaeton'),
+                          ChipData('Classical'),
+                          ChipData('Folk'),
+                          ChipData('Metal')
+                        ],
+                        onChanged: (val) =>
+                            setState(() => _model.choiceChipsValues = val),
+                        selectedChipStyle: ChipStyle(
+                          backgroundColor: Color(0xFF6958FE),
+                          textStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                          iconColor: Colors.white,
+                          iconSize: 18.0,
+                          elevation: 4.0,
+                        ),
+                        unselectedChipStyle: ChipStyle(
+                          backgroundColor: Color(0xFF161630),
+                          textStyle:
+                              FlutterFlowTheme.of(context).bodySmall.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF4F4F71),
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                          iconColor: Color(0xFFE3E7ED),
+                          iconSize: 18.0,
+                          elevation: 0.0,
+                        ),
+                        chipSpacing: 12.0,
+                        multiselect: true,
+                        initialized: _model.choiceChipsValues != null,
+                        alignment: WrapAlignment.start,
+                        controller: _model.choiceChipsValueController ??=
+                            FormFieldController<List<String>>(
+                          [],
                         ),
                       ),
                     ),
                   ],
                 ),
-                Expanded(child: EventList()),
-              ],
-            ),
-          ),
-          bottomNavigationBar: ConvexAppBar(
-            items: BottomNavBarNavigationItems.navigationItems,
-            initialActiveIndex: 1,
-            onTap: (int i) => {
-              debugPrint("Switching to screen: $i"),
-              context.pushNamed(
-                NavigationRouteIDs.routeIDs[i],
-                extra: <String, dynamic>{
-                  kTransitionInfoKey: TransitionInfo(
-                    hasTransition: true,
-                    transitionType: PageTransitionType.fade,
-                    duration: Duration(milliseconds: 500),
+              ).animateOnPageLoad(animationsMap['rowOnPageLoadAnimation']!),
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        child: Text(
+                          'Latest Events',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                        ).animateOnPageLoad(
+                            animationsMap['textOnPageLoadAnimation']!),
+                      ),
+                    ),
                   ),
-                },
-              )
-            },
-          )),
+                ],
+              ),
+              Expanded(child: EventList()),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavMagic(initialIndex: 1, user: false),
+      ),
     );
   }
 }

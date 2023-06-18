@@ -47,12 +47,24 @@ class EventCard extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Image.network(
-                  'https://st1.uvnimg.com/d6/ac/92bf50ac462d85264579e823727d/RICHIE%2520HAWTIN.jpeg',
-                  width: double.infinity,
-                  height: 120.0,
-                  fit: BoxFit.cover,
-                ),
+                event.photoUrl != null &&
+                        event.photoUrl != "" &&
+                        Uri.tryParse(event.photoUrl ?? "rip")
+                                ?.hasAbsolutePath ==
+                            true
+                    ? Image.network(
+                        event.photoUrl.toString(),
+                        width: double.infinity,
+                        height: 120.0,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
+                      )
+                    : Image.asset(
+                        'assets/images/4183289.jpg',
+                        width: double.infinity,
+                        height: 120.0,
+                        fit: BoxFit.cover,
+                      ),
                 Container(
                   width: MediaQuery.of(context).size.width * 1.0,
                   decoration: BoxDecoration(),
